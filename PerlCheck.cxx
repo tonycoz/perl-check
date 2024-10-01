@@ -53,12 +53,12 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
 
 namespace {
 
-class PerlLiteralFunctionCheckModule : public ClangTidyModule
+class PerlCheckModule : public ClangTidyModule
 {
 public:
     void addCheckFactories(ClangTidyCheckFactories& CheckFactories) override
     {
-        CheckFactories.registerCheck<PerlLiteralFunctionCheck>("perl-tidy-literal-functions");
+        CheckFactories.registerCheck<PerlLiteralFunctionCheck>("perl-literal-sv_setpvn");
     }
 };
 
@@ -67,10 +67,10 @@ public:
 namespace clang::tidy {
 
 // Register the module using this statically initialized variable.
-static ClangTidyModuleRegistry::Add<::PerlLiteralFunctionCheckModule> awesomePrefixCheckInit("perl-tidy-literal-functions",
-                                                                                       "Adds 'perl-tidy-literal-functions' checks.");
+static ClangTidyModuleRegistry::Add<::PerlCheckModule> perlCheckInit("perl-literal-sv_setpvn",
+                                                                                       "Adds 'perl-literal-sv_setpvn' check.");
 
 // This anchor is used to force the linker to link in the generated object file and thus register the module.
-volatile int awesomePrefixCheckAnchorSource = 0;
+volatile int perlCheckAnchorSource = 0;
 
 }  // namespace clang::tidy
