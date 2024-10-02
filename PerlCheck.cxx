@@ -29,24 +29,23 @@ void PerlLiteralFunctionCheck::registerMatchers(MatchFinder* Finder)
         callExpr(isExpandedFromMacro("sv_setpvn"),
                  hasArgument(1+use_threads,
                              traverse(TK_IgnoreUnlessSpelledInSource,
-                                      stringLiteral())
-                 )
-        ).bind("perl_check_literal_functions"), this);
+                                      stringLiteral().bind("literal"))
+                 ),
+                 hasArgument(2+use_threads, anything())
+        ).bind("call"), this);
 }
 
 void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
 {
-    const auto* MatchedCall = Result.Nodes.getNodeAs<CallExpr>("perl_check_literal_functions");
+    const auto *MatchedCall = Result.Nodes.getNodeAs<CallExpr>("call");
+    const auto *strLit = Result.Nodes.getNodeAs<StringLiteral>("literal");
+
     // this is the expanded arguments which may include aTHX
     auto numArgs = MatchedCall->getNumArgs();
     if (numArgs < 2)
       return; // something is strange
 
     const auto *Args = MatchedCall->getArgs();
-    const auto strArg = Args[numArgs-2]->IgnoreUnlessSpelledInSource();
-    assert(strArg->getStmtClass() == Stmt::StringLiteralClass);
-
-    const auto strLit = static_cast<const StringLiteral *>(strArg);
 
     const auto sizeArg = Args[numArgs-1]->IgnoreUnlessSpelledInSource();
     Expr::EvalResult sizeIntResult;
