@@ -1,5 +1,6 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
+#include "clang/Lex/Lexer.h"
 #include "clang-tidy/ClangTidy.h"
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
@@ -37,15 +38,15 @@ void PerlLiteralFunctionCheck::registerMatchers(MatchFinder* Finder)
 
 void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
 {
-    const auto *MatchedCall = Result.Nodes.getNodeAs<CallExpr>("call");
+    const auto *matchedCall = Result.Nodes.getNodeAs<CallExpr>("call");
     const auto *strLit = Result.Nodes.getNodeAs<StringLiteral>("literal");
 
     // this is the expanded arguments which may include aTHX
-    auto numArgs = MatchedCall->getNumArgs();
+    auto numArgs = matchedCall->getNumArgs();
     if (numArgs < 2)
       return; // something is strange
 
-    const auto *Args = MatchedCall->getArgs();
+    const auto *Args = matchedCall->getArgs();
 
     const auto sizeArg = Args[numArgs-1]->IgnoreUnlessSpelledInSource();
     Expr::EvalResult sizeIntResult;
@@ -54,10 +55,21 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
       return;
     const auto sizeInt = sizeIntResult.Val.getInt();
     if (sizeInt > strLit->getLength())
-      diag(MatchedCall->getExprLoc(), "length too long for literal");
+      diag(matchedCall->getExprLoc(), "length too long for literal");
     if (sizeInt != strLit->getLength())
       return;
-    diag(MatchedCall->getExprLoc(), "sv_setpvn() with literal better written as sv_setpvs()");
+    const auto *svArg = Args[use_threads];
+    const LangOptions &Opts = getLangOpts();
+    const auto svArgText = Lexer::getSourceText(CharSourceRange::getTokenRange(svArg->getSourceRange()), *Result.SourceManager, Opts);
+    const auto litText = Lexer::getSourceText(CharSourceRange::getTokenRange(strLit->getSourceRange()), *Result.SourceManager, Opts);
+    std::string repl = "sv_setpvs(";
+    repl += svArgText;
+    repl += ", ";
+    repl += litText;
+    repl += ")";
+    auto hint = FixItHint::CreateReplacement(matchedCall->getSourceRange(), repl);
+    diag(matchedCall->getExprLoc(), "sv_setpvn() with literal better written as sv_setpvs()")
+      << hint;
 }
 
 namespace {
