@@ -67,7 +67,11 @@ class PerlCheckModule : public ClangTidyModule
 public:
     void addCheckFactories(ClangTidyCheckFactories& CheckFactories) override
     {
-        CheckFactories.registerCheck<PerlLiteralFunctionCheck>("perl-literal-sv_setpvn");
+      CheckFactories.registerCheckFactory(
+          "perl-literal-sv_setpvn",
+          [](llvm::StringRef Name, ClangTidyContext *Context){
+            return std::make_unique<PerlLiteralFunctionCheck>(Name, Context);
+          });
     }
 };
 
