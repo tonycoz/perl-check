@@ -4,10 +4,14 @@
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
 #include "clang-tidy/ClangTidyModuleRegistry.h"
+#include <string>
+#include <cassert>
 
 using namespace clang;
 using namespace clang::tidy;
 using namespace clang::ast_matchers;
+
+constexpr auto use_threads = 0;
 
 class PerlLiteralFunctionCheck : public ClangTidyCheck
 {
@@ -21,7 +25,13 @@ public:
 
 void PerlLiteralFunctionCheck::registerMatchers(MatchFinder* Finder)
 {
-  Finder->addMatcher(callExpr(isExpandedFromMacro("sv_setpvn")).bind("perl_check_literal_functions"), this);
+    Finder->addMatcher(
+        callExpr(isExpandedFromMacro("sv_setpvn"),
+                 hasArgument(1+use_threads,
+                             traverse(TK_IgnoreUnlessSpelledInSource,
+                                      stringLiteral())
+                 )
+        ).bind("perl_check_literal_functions"), this);
 }
 
 void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
@@ -34,8 +44,8 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
 
     const auto *Args = MatchedCall->getArgs();
     const auto strArg = Args[numArgs-2]->IgnoreUnlessSpelledInSource();
-    if (strArg->getStmtClass() != Stmt::StringLiteralClass)
-      return;
+    assert(strArg->getStmtClass() == Stmt::StringLiteralClass);
+
     const auto strLit = static_cast<const StringLiteral *>(strArg);
 
     const auto sizeArg = Args[numArgs-1]->IgnoreUnlessSpelledInSource();
