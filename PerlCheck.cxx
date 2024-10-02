@@ -1,3 +1,4 @@
+#include "llvm/Support/FormatVariadic.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/Lex/Lexer.h"
@@ -62,11 +63,7 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
     const LangOptions &Opts = getLangOpts();
     const auto svArgText = Lexer::getSourceText(CharSourceRange::getTokenRange(svArg->getSourceRange()), *Result.SourceManager, Opts);
     const auto litText = Lexer::getSourceText(CharSourceRange::getTokenRange(strLit->getSourceRange()), *Result.SourceManager, Opts);
-    std::string repl = "sv_setpvs(";
-    repl += svArgText;
-    repl += ", ";
-    repl += litText;
-    repl += ")";
+    std::string repl = formatv("sv_setpvs({0}, {1})", svArgText, litText);
     auto hint = FixItHint::CreateReplacement(matchedCall->getSourceRange(), repl);
     diag(matchedCall->getExprLoc(), "sv_setpvn() with literal better written as sv_setpvs()")
       << hint;
