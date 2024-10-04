@@ -18,6 +18,8 @@ add_library(perl-check MODULE
   )
 target_include_directories(perl-check PRIVATE ${CLANG_INCLUDE_DIRS})
 target_link_libraries(perl-check PRIVATE clang-tidy)
+# FIXME: this results in lots of warnings from the LLVM header
+#target_compile_options(perl-check PRIVATE -Wall -Wextra)
 
 option(RUN_TESTS "Run the tests for the perl-check module" OFF)
 if(RUN_TESTS)
