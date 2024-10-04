@@ -1,6 +1,6 @@
 {
   "Checks": "-*,perl-*",
   "CheckOptions":{
-    "PerlCheckMultiplicity": 1
+    "PerlCheckMultiplicity": 0
   }
 }
