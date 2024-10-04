@@ -1,2 +1,6 @@
+# where I normally cmake -B
 build/
+# emacs litter
 *~
+# from clangd
+.cache/
