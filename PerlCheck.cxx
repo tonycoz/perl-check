@@ -13,12 +13,13 @@ using namespace clang;
 using namespace clang::tidy;
 using namespace clang::ast_matchers;
 
-constexpr auto use_threads = 0;
-
 class PerlLiteralFunctionCheck : public ClangTidyCheck
 {
+  bool UseMultiplicity;
 public:
-    PerlLiteralFunctionCheck(StringRef Name, ClangTidyContext* Context) : ClangTidyCheck(Name, Context)
+  PerlLiteralFunctionCheck(StringRef Name, ClangTidyContext* Context) :
+    ClangTidyCheck(Name, Context),
+    UseMultiplicity(Options.getLocalOrGlobal("PerlCheckMultiplicity", 0))
     {
     }
     void registerMatchers(ast_matchers::MatchFinder* Finder) override;
@@ -29,11 +30,11 @@ void PerlLiteralFunctionCheck::registerMatchers(MatchFinder* Finder)
 {
     Finder->addMatcher(
         callExpr(isExpandedFromMacro("sv_setpvn"),
-                 hasArgument(1+use_threads,
+                 hasArgument(1+UseMultiplicity,
                              traverse(TK_IgnoreUnlessSpelledInSource,
                                       stringLiteral().bind("literal"))
                  ),
-                 hasArgument(2+use_threads, anything())
+                 hasArgument(2+UseMultiplicity, anything())
         ).bind("call"), this);
 }
 
@@ -59,7 +60,7 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
       diag(matchedCall->getExprLoc(), "length too long for literal");
     if (sizeInt != strLit->getLength())
       return;
-    const auto *svArg = Args[use_threads];
+    const auto *svArg = Args[UseMultiplicity];
     const LangOptions &Opts = getLangOpts();
     const auto svArgText = Lexer::getSourceText(CharSourceRange::getTokenRange(svArg->getSourceRange()), *Result.SourceManager, Opts);
     const auto litText = Lexer::getSourceText(CharSourceRange::getTokenRange(strLit->getSourceRange()), *Result.SourceManager, Opts);
