@@ -76,7 +76,6 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
       diag(matchedCall->getExprLoc(), "length too long for literal");
     if (sizeInt != strLit->getLength())
       return;
-    const auto *svArg = Args[UseMultiplicity];
     const LangOptions &Opts = getLangOpts();
     std::stringstream srepl;
     auto argString = [this, Args, Opts, Result](auto ArgNum){
