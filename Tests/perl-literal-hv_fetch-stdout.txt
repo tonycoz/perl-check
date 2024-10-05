@@ -1,0 +1,30 @@
+perl-literal-hv_fetch.c:11:9: warning: hv_fetch() with literal better written as hv_fetchs() [perl-literal-hv_fetch]
+   11 |   svp = hv_fetch(hv, "Foo", 3, 0);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |         hv_fetchs(hv, "Foo", 0)
+perl-literal-hv_fetch.c:11:9: note: FIX-IT applied suggested code changes
+perl-literal-hv_fetch.c:6:36: note: expanded from macro 'hv_fetch'
+    6 | #define hv_fetch(hv, s, len, lval) Perl_hv_fetch(aTHX_ hv, s, len, lval)
+      |                                    ^
+perl-literal-hv_fetch.c:12:9: warning: hv_fetch() with literal better written as hv_fetchs() [perl-literal-hv_fetch]
+   12 |   svp = hv_fetch(hv, "foo", sizeof("foo")-1, 0);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         hv_fetchs(hv, "foo", 0)
+perl-literal-hv_fetch.c:12:9: note: FIX-IT applied suggested code changes
+perl-literal-hv_fetch.c:6:36: note: expanded from macro 'hv_fetch'
+    6 | #define hv_fetch(hv, s, len, lval) Perl_hv_fetch(aTHX_ hv, s, len, lval)
+      |                                    ^
+perl-literal-hv_fetch.c:15:9: warning: length too long for literal [perl-literal-hv_fetch]
+   15 |   svp = hv_fetch(hv, "foo", 4, 0);
+      |         ^
+perl-literal-hv_fetch.c:6:36: note: expanded from macro 'hv_fetch'
+    6 | #define hv_fetch(hv, s, len, lval) Perl_hv_fetch(aTHX_ hv, s, len, lval)
+      |                                    ^
+perl-literal-hv_fetch.c:16:9: warning: hv_fetch() with literal better written as hv_fetchs() [perl-literal-hv_fetch]
+   16 |   svp = hv_fetch(hv, WARNbits, WARNbits_size, 0);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         hv_fetchs(hv, WARNbits, 0)
+perl-literal-hv_fetch.c:16:9: note: FIX-IT applied suggested code changes
+perl-literal-hv_fetch.c:6:36: note: expanded from macro 'hv_fetch'
+    6 | #define hv_fetch(hv, s, len, lval) Perl_hv_fetch(aTHX_ hv, s, len, lval)
+      |                                    ^

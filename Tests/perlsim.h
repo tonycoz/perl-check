@@ -2,11 +2,14 @@
 
 #ifdef MULTIPLICITY
 struct PerlInterpreter;
-struct PerlInterpreter *my_perl;
-#define pTHX_ struct PerlInterpreter *my_perl,
-#define aTHX_ my_perl,
+#define pTHX struct PerlInterpreter *my_perl
+#define pTHX_ pTHX_
+#define aTHX my_perl
+#define aTHX_ aTHX,
 #else
+#define aTHX void
 #define aTHX_
+#define pTHX void
 #define pTHX_
 #endif
 

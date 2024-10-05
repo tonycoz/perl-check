@@ -1,0 +1,30 @@
+perl-literal-newSVpvn.c:10:11: warning: newSVpvn() with literal better written as newSVpvs() [perl-literal-newSVpvn]
+   10 |   my_sv = newSVpvn("Foo", 3);
+      |           ^~~~~~~~~~~~~~~~~~
+      |           newSVpvs("Foo")
+perl-literal-newSVpvn.c:10:11: note: FIX-IT applied suggested code changes
+perl-literal-newSVpvn.c:4:26: note: expanded from macro 'newSVpvn'
+    4 | #define newSVpvn(s, len) Perl_newSVpvn(aTHX_ s, len)
+      |                          ^
+perl-literal-newSVpvn.c:11:11: warning: newSVpvn() with literal better written as newSVpvs() [perl-literal-newSVpvn]
+   11 |   my_sv = newSVpvn("foo", sizeof("foo")-1);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           newSVpvs("foo")
+perl-literal-newSVpvn.c:11:11: note: FIX-IT applied suggested code changes
+perl-literal-newSVpvn.c:4:26: note: expanded from macro 'newSVpvn'
+    4 | #define newSVpvn(s, len) Perl_newSVpvn(aTHX_ s, len)
+      |                          ^
+perl-literal-newSVpvn.c:14:11: warning: length too long for literal [perl-literal-newSVpvn]
+   14 |   my_sv = newSVpvn("foo", 4);
+      |           ^
+perl-literal-newSVpvn.c:4:26: note: expanded from macro 'newSVpvn'
+    4 | #define newSVpvn(s, len) Perl_newSVpvn(aTHX_ s, len)
+      |                          ^
+perl-literal-newSVpvn.c:15:11: warning: newSVpvn() with literal better written as newSVpvs() [perl-literal-newSVpvn]
+   15 |   my_sv = newSVpvn(WARNbits, WARNbits_size);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           newSVpvs(WARNbits)
+perl-literal-newSVpvn.c:15:11: note: FIX-IT applied suggested code changes
+perl-literal-newSVpvn.c:4:26: note: expanded from macro 'newSVpvn'
+    4 | #define newSVpvn(s, len) Perl_newSVpvn(aTHX_ s, len)
+      |                          ^
