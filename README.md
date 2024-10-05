@@ -20,9 +20,9 @@ cmake --build build
 which should create `libperl-check.so` in `build/`.  You'll need the
 path to this and to `.perl-clang-tidy` in this directory.
 
-If you have multiple versions of `cmake` installed it seems to select
-the first `clang` it finds going by directory order, you can control
-that with `CMAKE_PREFIX_PATH`, for example:
+If you have multiple versions of `clang` installed `cmake` seems to
+select the first `clang` it finds going by directory order, you can
+control that with `CMAKE_PREFIX_PATH`, for example:
 
 ```
 export CMAKE_PREFIX_PATH=/usr/lib/llvm-20
@@ -49,6 +49,15 @@ Invoking clang-tidy
 ```
 clang-tidy-18 --load=path/to/build/libperl-check.so --config-file path/to/perl-check/.perl-clang-tidy source.c
 ```
+
+The `clang-tidy` invoked should match the version the loadable module
+was built with, the simplest way to see that is:
+
+```
+$ grep Clang_DIR build/CMakeCache.txt
+Clang_DIR:PATH=/usr/lib/cmake/clang-18
+```
+
 
 Example output
 ========
