@@ -22,3 +22,5 @@ int buflen;
 
 #define WARNbits "1234"
 #define WARNbits_size 4
+
+#define SVs_TEMP 0x01

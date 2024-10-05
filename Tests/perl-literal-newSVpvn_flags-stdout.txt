@@ -1,0 +1,30 @@
+perl-literal-newSVpvn_flags.c:10:11: warning: newSVpvn_flags() with literal better written as newSVpvs_flags() [perl-literal-newSVpvn_flags]
+   10 |   my_sv = newSVpvn_flags("Foo", 3, SVs_TEMP);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           newSVpvs_flags("Foo", SVs_TEMP)
+perl-literal-newSVpvn_flags.c:10:11: note: FIX-IT applied suggested code changes
+perl-literal-newSVpvn_flags.c:4:39: note: expanded from macro 'newSVpvn_flags'
+    4 | #define newSVpvn_flags(s, len, flags) Perl_newSVpvn_flags(aTHX_ s, len, flags)
+      |                                       ^
+perl-literal-newSVpvn_flags.c:11:11: warning: newSVpvn_flags() with literal better written as newSVpvs_flags() [perl-literal-newSVpvn_flags]
+   11 |   my_sv = newSVpvn_flags("foo", sizeof("foo")-1, SVs_TEMP);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           newSVpvs_flags("foo", SVs_TEMP)
+perl-literal-newSVpvn_flags.c:11:11: note: FIX-IT applied suggested code changes
+perl-literal-newSVpvn_flags.c:4:39: note: expanded from macro 'newSVpvn_flags'
+    4 | #define newSVpvn_flags(s, len, flags) Perl_newSVpvn_flags(aTHX_ s, len, flags)
+      |                                       ^
+perl-literal-newSVpvn_flags.c:14:11: warning: length too long for literal [perl-literal-newSVpvn_flags]
+   14 |   my_sv = newSVpvn_flags("foo", 4, SVs_TEMP);
+      |           ^
+perl-literal-newSVpvn_flags.c:4:39: note: expanded from macro 'newSVpvn_flags'
+    4 | #define newSVpvn_flags(s, len, flags) Perl_newSVpvn_flags(aTHX_ s, len, flags)
+      |                                       ^
+perl-literal-newSVpvn_flags.c:15:11: warning: newSVpvn_flags() with literal better written as newSVpvs_flags() [perl-literal-newSVpvn_flags]
+   15 |   my_sv = newSVpvn_flags(WARNbits, WARNbits_size, SVs_TEMP);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           newSVpvs_flags(WARNbits, SVs_TEMP)
+perl-literal-newSVpvn_flags.c:15:11: note: FIX-IT applied suggested code changes
+perl-literal-newSVpvn_flags.c:4:39: note: expanded from macro 'newSVpvn_flags'
+    4 | #define newSVpvn_flags(s, len, flags) Perl_newSVpvn_flags(aTHX_ s, len, flags)
+      |                                       ^

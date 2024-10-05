@@ -141,6 +141,13 @@ public:
             return std::make_unique<PerlLiteralFunctionCheck>(Name, Context, "newSVpvn", "newSVpvs", 0, 1, std::vector{ 0 });
           });
       CheckFactories.registerCheckFactory(
+          "perl-literal-newSVpvn_flags",
+          [](llvm::StringRef Name, ClangTidyContext *Context){
+            return std::make_unique<PerlLiteralFunctionCheck>(
+                Name, Context, "newSVpvn_flags", "newSVpvs_flags",
+                0, 1, std::vector{ 0, 2 });
+          });
+      CheckFactories.registerCheckFactory(
           "perl-literal-hv_fetch",
           [](llvm::StringRef Name, ClangTidyContext *Context){
             return std::make_unique<PerlLiteralFunctionCheck>(Name, Context, "hv_fetch", "hv_fetchs", 1, 2, std::vector{ 0, 1, 3 });
