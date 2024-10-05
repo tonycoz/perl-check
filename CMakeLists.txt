@@ -23,7 +23,7 @@ target_link_libraries(perl-check PRIVATE clang-tidy)
 # FIXME: this results in lots of warnings from the LLVM header
 #target_compile_options(perl-check PRIVATE -Wall -Wextra)
 
-option(RUN_TESTS "Run the tests for the perl-check module" OFF)
+option(RUN_TESTS "Run the tests for the perl-check module" ON)
 if(RUN_TESTS)
   enable_testing()
   add_subdirectory(Tests)

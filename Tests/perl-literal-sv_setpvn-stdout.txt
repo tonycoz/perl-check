@@ -1,0 +1,30 @@
+perl-literal-sv_setpvn.c:8:3: warning: sv_setpvn() with literal better written as sv_setpvs() [perl-literal-sv_setpvn]
+    8 |   sv_setpvn(sv, "Foo", 3);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_setpvs(sv, "Foo")
+perl-literal-sv_setpvn.c:8:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_setpvn.c:4:31: note: expanded from macro 'sv_setpvn'
+    4 | #define sv_setpvn(sv, s, len) Perl_sv_setpvn(aTHX_ sv, s, len)
+      |                               ^
+perl-literal-sv_setpvn.c:9:3: warning: sv_setpvn() with literal better written as sv_setpvs() [perl-literal-sv_setpvn]
+    9 |   sv_setpvn(sv, "foo", sizeof("foo")-1);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_setpvs(sv, "foo")
+perl-literal-sv_setpvn.c:9:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_setpvn.c:4:31: note: expanded from macro 'sv_setpvn'
+    4 | #define sv_setpvn(sv, s, len) Perl_sv_setpvn(aTHX_ sv, s, len)
+      |                               ^
+perl-literal-sv_setpvn.c:12:3: warning: length too long for literal [perl-literal-sv_setpvn]
+   12 |   sv_setpvn(sv, "foo", 4);
+      |   ^
+perl-literal-sv_setpvn.c:4:31: note: expanded from macro 'sv_setpvn'
+    4 | #define sv_setpvn(sv, s, len) Perl_sv_setpvn(aTHX_ sv, s, len)
+      |                               ^
+perl-literal-sv_setpvn.c:13:3: warning: sv_setpvn() with literal better written as sv_setpvs() [perl-literal-sv_setpvn]
+   13 |   sv_setpvn(sv, WARNbits, WARNbits_size);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_setpvs(sv, WARNbits)
+perl-literal-sv_setpvn.c:13:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_setpvn.c:4:31: note: expanded from macro 'sv_setpvn'
+    4 | #define sv_setpvn(sv, s, len) Perl_sv_setpvn(aTHX_ sv, s, len)
+      |                               ^
