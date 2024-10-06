@@ -26,6 +26,7 @@ void PerlLiteralFunctionCheck::registerMatchers(MatchFinder* Finder)
 {
     Finder->addMatcher(
         callExpr(isExpandedFromMacro(PvnMacro),
+                 unless(isExpandedFromMacro(PvsMacro)),
                  hasArgument(LiteralArgNum+UseMultiplicity,
                              traverse(TK_IgnoreUnlessSpelledInSource,
                                       stringLiteral().bind("literal"))
