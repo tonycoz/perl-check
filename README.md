@@ -77,3 +77,8 @@ Though this particular case could be using SvPVCLEAR().
 If any of the corresponding API macros is called with a string literal
 and the length of that literal, suggest the corresponding API that
 calculates the length automatically.
+
+* `perl-undef-sv_setsv`
+
+Complain about using `sv_setsv(sv, &PL_sv_undef)` since
+`sv_set_undef(sv)` is likely faster.

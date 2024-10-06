@@ -1,19 +1,25 @@
 #include <stddef.h>
 
+typedef struct sv { unsigned r; } SV;
+
 #ifdef MULTIPLICITY
-struct PerlInterpreter;
-#define pTHX struct PerlInterpreter *my_perl
-#define pTHX_ pTHX_
-#define aTHX my_perl
-#define aTHX_ aTHX,
+struct PerlInterpreter {
+  SV Iimmortals[5];
+};
+#  define pTHX struct PerlInterpreter *my_perl
+#  define pTHX_ pTHX,
+#  define aTHX my_perl
+#  define aTHX_ aTHX,
+#  define PL_immortals (my_perl->Iimmortals)
 #else
-#define aTHX void
-#define aTHX_
-#define pTHX void
-#define pTHX_
+#  define aTHX void
+#  define aTHX_
+#  define pTHX void
+#  define pTHX_
+extern SV PL_immortals[5];
 #endif
 
-typedef struct sv SV;
+#define PL_sv_undef (PL_immortals[0])
 
 extern SV *my_sv;
 

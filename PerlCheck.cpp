@@ -1,4 +1,5 @@
 #include "PerlLiteralFunctionCheck.h"
+#include "PerlUndefSetsvCheck.h"
 #include "clang-tidy/ClangTidy.h"
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
@@ -44,6 +45,7 @@ public:
                 Name, Context, "hv_fetch", "hv_fetchs",
                 1, 2, std::vector{ 0, 1, 3 });
           });
+      CheckFactories.registerCheck<PerlUndefSetsvCheck>("perl-undef-sv_setsv");
     }
 };
 
