@@ -16,7 +16,7 @@ endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(perl-check MODULE
-  PerlCheck.cpp
+  PerlCheck.cpp PerlLiteralFunctionCheck.cpp
   )
 target_include_directories(perl-check PRIVATE ${CLANG_INCLUDE_DIRS})
 target_link_libraries(perl-check PRIVATE clang-tidy)
