@@ -63,6 +63,7 @@ public:
     LengthArgNum(LengthArgNum_),
     KeepArgs(KeepArgs_)
     {
+      assert(KeepArgs.size() > 0);
     }
     void registerMatchers(ast_matchers::MatchFinder* Finder) override;
     void check(const ast_matchers::MatchFinder::MatchResult& Result) override;
