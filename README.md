@@ -1,12 +1,10 @@
-perl-check
-==========
+# perl-check
 
 This is a clang-tidy plugin that currently checks for calls to
 sv_setpvn() with a literal string, which are better written with
 sv_setpvs().
 
-Building the module
-========
+# Building the module
 
 Install clang and it's development libraries, I used the debs from
 apt.llvm.org, and tested with llvm 18.
@@ -30,8 +28,7 @@ cmake -B build
 cmake --build build
 ```
 
-Build a compilation database
-===
+# Build a compilation database
 
 Switch to your perl checkout, you need to start with a clean tree.
 
@@ -43,8 +40,7 @@ bear -- make
 ```
 You should now have `compile-commands.json`
 
-Invoking clang-tidy
-======
+# Invoking clang-tidy
 
 ```
 clang-tidy-18 --load=path/to/build/libperl-check.so --config-file path/to/perl-check/.perl-clang-tidy source.c
@@ -59,8 +55,8 @@ Clang_DIR:PATH=/usr/lib/cmake/clang-18
 ```
 
 
-Example output
-========
+# Example output
+
 ```
 SysV.c:609:7: warning: sv_setpvn() with literal better written as sv_setpvs() [perl-tidy-literal-functions]
   609 |       sv_setpvn(sv, "", 0);
@@ -70,3 +66,14 @@ SysV.c:609:7: warning: sv_setpvn() with literal better written as sv_setpvs() [p
       |                                                 ^
 ```
 Though this particular case could be using SvPVCLEAR().
+
+# Checks
+
+* `perl-literal-sv_setpvn`
+* `perl-literal-hv_fetch`
+* `perl-literal-newSVpvn`
+* `perl-literal-newSVpvn_flags`
+
+If any of the corresponding API macros is called with a string literal
+and the length of that literal, suggest the corresponding API that
+calculates the length automatically.
