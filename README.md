@@ -58,12 +58,45 @@ Clang_DIR:PATH=/usr/lib/cmake/clang-18
 # Example output
 
 ```
-SysV.c:609:7: warning: sv_setpvn() with literal better written as sv_setpvs() [perl-tidy-literal-functions]
-  609 |       sv_setpvn(sv, "", 0);
-      |       ^
-../../embed.h:734:49: note: expanded from macro 'sv_setpvn'
-  734 | # define sv_setpvn(a,b,c)                       Perl_sv_setpvn(aTHX_ a,b,c)
+$ run-clang-tidy-18 -load=/home/tony/dev/llvm/git/perl-check/build/libperl-check.so -checks='-*,perl-*' builtin.c mro.c
+Enabled checks:
+    perl-literal-hv_fetch
+    perl-literal-newSVpvn
+    perl-literal-newSVpvn_flags
+    perl-literal-sv_setpvn
+    perl-undef-sv_setsv
+
+clang-tidy-18 -checks=-*,perl-* -p=/home/tony/dev/perl/git/perl6 -load=/home/tony/dev/llvm/git/perl-check/build/libperl-check.so /home/tony/dev/perl/git/perl6/ext/mro/mro.c
+mro.c:550:15: warning: newSVpvn_flags() with literal better written as newSVpvs_flags() [perl-literal-newSVpvn_flags]
+  550 |       ST(0) = newSVpvn_flags("dfs", 3, SVs_TEMP);
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |               newSVpvs_flags("dfs", SVs_TEMP)
+../../embed.h:440:49: note: expanded from macro 'newSVpvn_flags'
+  440 | # define newSVpvn_flags(a,b,c)                  Perl_newSVpvn_flags(aTHX_ a,b,c)
       |                                                 ^
+1 warning generated.
+clang-tidy-18 -checks=-*,perl-* -p=/home/tony/dev/perl/git/perl6 -load=/home/tony/dev/llvm/git/perl-check/build/libperl-check.so /home/tony/dev/perl/git/perl6/builtin.c
+builtin.c:556:9: warning: sv_setsv(..., &PL_sv_undef) better written as sv_set_undef() [perl-undef-sv_setsv]
+  556 |         sv_setsv(TARG, &PL_sv_undef);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         sv_set_undef(TARG)
+./sv.h:2242:9: note: expanded from macro 'sv_setsv'
+ 2242 |         sv_setsv_flags(dsv, ssv, SV_GMAGIC|SV_DO_COW_SVSETSV)
+      |         ^
+./embed.h:747:49: note: expanded from macro 'sv_setsv_flags'
+  747 | # define sv_setsv_flags(a,b,c)                  Perl_sv_setsv_flags(aTHX_ a,b,c)
+      |                                                 ^
+builtin.c:572:9: warning: sv_setsv(..., &PL_sv_undef) better written as sv_set_undef() [perl-undef-sv_setsv]
+  572 |         sv_setsv(TARG, &PL_sv_undef);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         sv_set_undef(TARG)
+./sv.h:2242:9: note: expanded from macro 'sv_setsv'
+ 2242 |         sv_setsv_flags(dsv, ssv, SV_GMAGIC|SV_DO_COW_SVSETSV)
+      |         ^
+./embed.h:747:49: note: expanded from macro 'sv_setsv_flags'
+  747 | # define sv_setsv_flags(a,b,c)                  Perl_sv_setsv_flags(aTHX_ a,b,c)
+      |                                                 ^
+2 warnings generated.
 ```
 Though this particular case could be using SvPVCLEAR().
 
