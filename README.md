@@ -6,7 +6,7 @@ sv_setpvs().
 
 # Building the module
 
-Install clang and it's development libraries, I used the debs from
+Install clang and its development libraries, I used the debs from
 apt.llvm.org, and tested with llvm 18.
 
 You also need cmake, you make also want libedit-dev.
