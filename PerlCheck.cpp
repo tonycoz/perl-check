@@ -52,8 +52,8 @@ public:
 namespace clang::tidy {
 
 // Register the module using this statically initialized variable.
-static ClangTidyModuleRegistry::Add<::PerlCheckModule> perlCheckInit("perl-literal-sv_setpvn",
-                                                                                       "Adds 'perl-literal-sv_setpvn' check.");
+static ClangTidyModuleRegistry::Add<::PerlCheckModule> perlCheckInit(
+ "perl-check", "Add checks perl source checks.");
 
 // This anchor is used to force the linker to link in the generated object file and thus register the module.
 volatile int perlCheckAnchorSource = 0;
