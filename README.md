@@ -98,7 +98,6 @@ builtin.c:572:9: warning: sv_setsv(..., &PL_sv_undef) better written as sv_set_u
       |                                                 ^
 2 warnings generated.
 ```
-Though this particular case could be using SvPVCLEAR().
 
 # Checks
 
