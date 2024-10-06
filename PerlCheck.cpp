@@ -85,14 +85,8 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
     const auto *matchedCall = Result.Nodes.getNodeAs<CallExpr>("call");
     const auto *strLit = Result.Nodes.getNodeAs<StringLiteral>("literal");
 
-    // this is the expanded arguments which may include aTHX
-    auto numArgs = matchedCall->getNumArgs();
-    if (numArgs < 2)
-      return; // something is strange
-
-    const auto *Args = matchedCall->getArgs();
-
-    const auto sizeArg = Args[UseMultiplicity+LengthArgNum]->IgnoreUnlessSpelledInSource();
+    const auto sizeArg = matchedCall->getArg(UseMultiplicity+LengthArgNum)
+      ->IgnoreUnlessSpelledInSource();
     Expr::EvalResult sizeIntResult;
     if (!sizeArg->EvaluateAsInt(sizeIntResult, *Result.Context)
         || !sizeIntResult.Val.isInt())
@@ -104,10 +98,10 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
       return;
     const LangOptions &Opts = getLangOpts();
     std::stringstream srepl;
-    auto argString = [this, Args, Opts, Result](auto ArgNum){
+    auto argString = [this, matchedCall, Opts, Result](auto ArgNum){
       return Lexer::getSourceText(
           CharSourceRange::getTokenRange(
-              Args[UseMultiplicity+ArgNum]->getSourceRange()
+              matchedCall->getArg(UseMultiplicity+ArgNum)->getSourceRange()
           ),
           *Result.SourceManager, Opts
        ).operator std::string_view();
