@@ -1,5 +1,4 @@
 #include "PerlLiteralFunctionCheck.h"
-#include <sstream>
 #include <cassert>
 
 using namespace clang;
@@ -61,21 +60,17 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
           *Result.SourceManager, Opts
        ).operator std::string_view();
     };
-    // I'm not entired happy with this, iostreams has significant
-    // overhead, but using accumulate() here would (I think) be
-    // theoretically quadratic time as the expanding string would be
-    // reallocated and expanded at each step.
-    //
-    // Of course the N is always small here so it practically wouldn't
-    // matter.
 
-    std::ostringstream srepl;
+    std::string repl;
+    llvm::raw_string_ostream srepl{repl};
+    srepl.reserveExtraSpace(80); // typically enough
+
     srepl << PvsMacro << '(' << argString(KeepArgs[0]);
     for (auto i = std::next(KeepArgs.begin()); i != KeepArgs.end(); ++i) {
       srepl << ", " << argString(*i);
     }
     srepl << ')';
-    std::string repl = srepl.str();
+
     auto hint = FixItHint::CreateReplacement(matchedCall->getSourceRange(), repl);
     diag(matchedCall->getExprLoc(), "%0() with literal better written as %1()")
       << PvnMacro << PvsMacro << hint;
