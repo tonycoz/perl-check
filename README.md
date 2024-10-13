@@ -114,3 +114,13 @@ calculates the length automatically.
 
 Complain about using `sv_setsv(sv, &PL_sv_undef)` since
 `sv_set_undef(sv)` is likely faster.
+
+* `perl-mortal-newSVpvn`
+
+Check for calls to the given function wrapped by `sv_2mortal()`, when
+the wrapped function has a flag to mortalize the result.
+
+# FixIts
+
+Currently all the checks provide fixits, and clang-tidy can apply the
+fixes.
