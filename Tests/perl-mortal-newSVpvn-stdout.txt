@@ -1,0 +1,8 @@
+perl-mortal-newSVpvn.c:13:11: warning: sv_2mortal(newSVpvn(...)) better written with SVs_TEMP [perl-mortal-newSVpvn]
+   13 |   my_sv = sv_2mortal(newSVpvn(buf, buflen));
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           newSVpvn_flags(buf, buflen, SVs_TEMP)
+perl-mortal-newSVpvn.c:13:11: note: FIX-IT applied suggested code changes
+perl-mortal-newSVpvn.c:8:24: note: expanded from macro 'sv_2mortal'
+    8 | #define sv_2mortal(sv) Perl_sv_2mortal(aTHX_ sv)
+      |                        ^

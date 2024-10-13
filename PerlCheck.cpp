@@ -1,5 +1,6 @@
 #include "PerlLiteralFunctionCheck.h"
 #include "PerlUndefSetsvCheck.h"
+#include "PerlMortalFunctionCheck.h"
 #include "clang-tidy/ClangTidy.h"
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
@@ -46,6 +47,14 @@ public:
                 1, 2, std::vector{ 0, 1, 3 });
           });
       CheckFactories.registerCheck<PerlUndefSetsvCheck>("perl-undef-sv_setsv");
+      CheckFactories.registerCheckFactory(
+          "perl-mortal-newSVpvn",
+          [](llvm::StringRef Name, ClangTidyContext *Context) {
+            return std::make_unique<PerlMortalFunctionCheck>(
+                Name, Context, "newSVpvn", "newSVpvn_flags",
+                -1, std::vector{ 0, 1, -1 }, "SVs_TEMP"sv
+                );
+          });
     }
 };
 

@@ -16,3 +16,5 @@ add_run_clang_tidy_test(perl-literal-newSVpvn_flags)
 add_run_clang_tidy_test(perl-literal-hv_fetch)
 
 add_run_clang_tidy_test(perl-undef-sv_setsv)
+
+add_run_clang_tidy_test(perl-mortal-newSVpvn)

@@ -8,7 +8,11 @@ extern void Perl_sv_setpvn(pTHX_ SV *sv, const char *s, size_t len);
 
 extern SV *Perl_newSVpvn(pTHX_ const char *s, size_t len);
 #define newSVpvn(s, len) Perl_newSVpvn(aTHX_ s, len)
-#define newSVpvs(s) Perl_newSVpvn(s, sizeof(s "")-1)
+#define newSVpvs(s) Perl_newSVpvn(aTHX_ s, sizeof(s "")-1)
+
+extern SV *Perl_newSVpvn_flags(pTHX_ const char *s, size_t len, unsigned flags);
+#define newSVpvn_flags(s, len, flags) Perl_newSVpvn_flags(aTHX_ s, len, flags)
+#define newSVpvs_flags(s) Perl_newSVpvn_flags(aTHX_ s, sizeof(s "")-1, flags)
 
 typedef struct hv HV;
 
@@ -20,6 +24,9 @@ extern void Perl_sv_setsv(pTHX_ SV *dsv, SV *ssv);
 extern void Perl_sv_set_undef(pTHX_ SV *dsv);
 #define sv_setsv(dsv, ssv) Perl_sv_setsv(aTHX_ dsv, ssv)
 #define sv_set_undef(dsv) Perl_sv_set_undef(aTHX_ dsv)
+
+extern SV *Perl_sv_2mortal(pTHX_ SV *sv);
+#define sv_2mortal(sv) Perl_sv_2mortal(aTHX_ sv)
 
 char buf[10];
 int buflen;
@@ -44,6 +51,10 @@ void foo(pTHX_ SV *sv, HV *hv) {
 
   sv_setsv(sv, &PL_sv_undef);
   sv_set_undef(sv);
+
+  my_sv = sv_2mortal(newSVpvn(buf, buflen));
+  my_sv = sv_2mortal(newSVpvs("test"));
+  my_sv = sv_2mortal(newSVpvn_flags(buf, buflen, SVf_UTF8));
 }
 
 void awesome_foo() { }

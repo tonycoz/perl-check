@@ -19,11 +19,13 @@ add_library(perl-check MODULE
   PerlCheck.cpp
   PerlLiteralFunctionCheck.cpp
   PerlUndefSetsvCheck.cpp
+  PerlMortalFunctionCheck.cpp
   )
 target_include_directories(perl-check PRIVATE ${CLANG_INCLUDE_DIRS})
 target_link_libraries(perl-check PRIVATE clang-tidy)
 # FIXME: this results in lots of warnings from the LLVM header
 #target_compile_options(perl-check PRIVATE -Wall -Wextra)
+target_compile_options(perl-check PRIVATE -fno-rtti)
 
 option(RUN_TESTS "Run the tests for the perl-check module" ON)
 if(RUN_TESTS)
