@@ -1,0 +1,30 @@
+perl-literal-savepvn.c:10:7: warning: savepvn() with literal better written as savepvs() [perl-literal-savepvn]
+   10 |   p = savepvn("Foo", 3);
+      |       ^~~~~~~~~~~~~~~~~
+      |       savepvs("Foo")
+perl-literal-savepvn.c:10:7: note: FIX-IT applied suggested code changes
+perl-literal-savepvn.c:4:25: note: expanded from macro 'savepvn'
+    4 | #define savepvn(s, len) Perl_savepvn(aTHX_ s, len)
+      |                         ^
+perl-literal-savepvn.c:11:7: warning: savepvn() with literal better written as savepvs() [perl-literal-savepvn]
+   11 |   p = savepvn("foo", sizeof("foo")-1);
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |       savepvs("foo")
+perl-literal-savepvn.c:11:7: note: FIX-IT applied suggested code changes
+perl-literal-savepvn.c:4:25: note: expanded from macro 'savepvn'
+    4 | #define savepvn(s, len) Perl_savepvn(aTHX_ s, len)
+      |                         ^
+perl-literal-savepvn.c:14:7: warning: length too long for literal [perl-literal-savepvn]
+   14 |   p = savepvn("foo", 4);
+      |       ^
+perl-literal-savepvn.c:4:25: note: expanded from macro 'savepvn'
+    4 | #define savepvn(s, len) Perl_savepvn(aTHX_ s, len)
+      |                         ^
+perl-literal-savepvn.c:15:7: warning: savepvn() with literal better written as savepvs() [perl-literal-savepvn]
+   15 |   p = savepvn(WARNbits, WARNbits_size);
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |       savepvs(WARNbits)
+perl-literal-savepvn.c:15:7: note: FIX-IT applied suggested code changes
+perl-literal-savepvn.c:4:25: note: expanded from macro 'savepvn'
+    4 | #define savepvn(s, len) Perl_savepvn(aTHX_ s, len)
+      |                         ^

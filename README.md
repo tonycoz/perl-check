@@ -106,6 +106,7 @@ builtin.c:572:9: warning: sv_setsv(..., &PL_sv_undef) better written as sv_set_u
 * `perl-literal-newSVpvn`
 * `perl-literal-newSVpvn_flags`
 * `perl-literal-sv_catpvn`
+* `perl-literal-savepvn`
 
 If any of the corresponding API macros is called with a string literal
 and the length of that literal, suggest the corresponding API that

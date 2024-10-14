@@ -53,6 +53,13 @@ public:
                 Name, Context, "sv_catpvn", "sv_catpvs",
                 1, 2, std::vector{ 0, 1 });
           });
+      CheckFactories.registerCheckFactory(
+          "perl-literal-savepvn",
+          [](llvm::StringRef Name, ClangTidyContext *Context){
+            return std::make_unique<PerlLiteralFunctionCheck>(
+                Name, Context, "savepvn", "savepvs",
+                0, 1, std::vector{ 0 });
+          });
       CheckFactories.registerCheck<PerlUndefSetsvCheck>("perl-undef-sv_setsv");
       CheckFactories.registerCheckFactory(
           "perl-mortal-newSVpvn",

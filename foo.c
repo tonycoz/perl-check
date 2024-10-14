@@ -33,6 +33,10 @@ extern void Perl_sv_set_undef(pTHX_ SV *dsv);
 extern SV *Perl_sv_2mortal(pTHX_ SV *sv);
 #define sv_2mortal(sv) Perl_sv_2mortal(aTHX_ sv)
 
+extern char *Perl_savepvn(pTHX_ const char *s, size_t len);
+#define savepvn(s, len) Perl_savepvn(aTHX_ s, len)
+#define savepvs(s) Perl_savepvn(aTHX_ s "", sizeof(s "")-1)
+
 char buf[10];
 int buflen;
 
@@ -56,6 +60,9 @@ void foo(pTHX_ SV *sv, HV *hv) {
 
   sv_catpvn(sv, "Foo", 3);
   sv_catpvs(sv, "Foo");
+
+  char *p = savepvn("Foo", 3);
+  p = savepvs("Foo");
 
   sv_setsv(sv, &PL_sv_undef);
   sv_set_undef(sv);
