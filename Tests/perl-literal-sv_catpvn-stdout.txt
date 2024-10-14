@@ -1,0 +1,30 @@
+perl-literal-sv_catpvn.c:8:3: warning: sv_catpvn() with literal better written as sv_catpvs() [perl-literal-sv_catpvn]
+    8 |   sv_catpvn(sv, "Foo", 3);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_catpvs(sv, "Foo")
+perl-literal-sv_catpvn.c:8:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_catpvn.c:4:31: note: expanded from macro 'sv_catpvn'
+    4 | #define sv_catpvn(sv, s, len) Perl_sv_catpvn(aTHX_ sv, s, len)
+      |                               ^
+perl-literal-sv_catpvn.c:9:3: warning: sv_catpvn() with literal better written as sv_catpvs() [perl-literal-sv_catpvn]
+    9 |   sv_catpvn(sv, "foo", sizeof("foo")-1);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_catpvs(sv, "foo")
+perl-literal-sv_catpvn.c:9:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_catpvn.c:4:31: note: expanded from macro 'sv_catpvn'
+    4 | #define sv_catpvn(sv, s, len) Perl_sv_catpvn(aTHX_ sv, s, len)
+      |                               ^
+perl-literal-sv_catpvn.c:12:3: warning: length too long for literal [perl-literal-sv_catpvn]
+   12 |   sv_catpvn(sv, "foo", 4);
+      |   ^
+perl-literal-sv_catpvn.c:4:31: note: expanded from macro 'sv_catpvn'
+    4 | #define sv_catpvn(sv, s, len) Perl_sv_catpvn(aTHX_ sv, s, len)
+      |                               ^
+perl-literal-sv_catpvn.c:13:3: warning: sv_catpvn() with literal better written as sv_catpvs() [perl-literal-sv_catpvn]
+   13 |   sv_catpvn(sv, WARNbits, WARNbits_size);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_catpvs(sv, WARNbits)
+perl-literal-sv_catpvn.c:13:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_catpvn.c:4:31: note: expanded from macro 'sv_catpvn'
+    4 | #define sv_catpvn(sv, s, len) Perl_sv_catpvn(aTHX_ sv, s, len)
+      |                               ^
