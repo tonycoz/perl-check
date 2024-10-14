@@ -1,3 +1,4 @@
+#include "PerlCheck.h"
 #include "PerlLiteralFunctionCheck.h"
 #include <cassert>
 
@@ -52,14 +53,7 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
       return;
     const LangOptions &Opts = getLangOpts();
 
-    auto argString = [this, matchedCall, Opts, Result](auto ArgNum){
-      return Lexer::getSourceText(
-          CharSourceRange::getTokenRange(
-              matchedCall->getArg(UseMultiplicity+ArgNum)->getSourceRange()
-          ),
-          *Result.SourceManager, Opts
-       ).operator std::string_view();
-    };
+    auto argString = getArgText(matchedCall, Result, Opts, UseMultiplicity);
 
     std::string repl;
     llvm::raw_string_ostream srepl{repl};

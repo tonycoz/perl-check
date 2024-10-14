@@ -1,6 +1,6 @@
+#include "PerlCheck.h"
 #include "PerlUndefSetsvCheck.h"
 #include "llvm/Support/FormatVariadic.h"
-#include <sstream>
 #include <cassert>
 
 using namespace clang;
@@ -37,14 +37,7 @@ void PerlUndefSetsvCheck::check(const MatchFinder::MatchResult& Result)
 
     const LangOptions &Opts = getLangOpts();
 
-    auto argString = [this, matchedCall, Opts, Result](auto ArgNum){
-      return Lexer::getSourceText(
-          CharSourceRange::getTokenRange(
-              matchedCall->getArg(UseMultiplicity+ArgNum)->getSourceRange()
-          ),
-          *Result.SourceManager, Opts
-       ).operator std::string_view();
-    };
+    auto argString = getArgText(matchedCall, Result, Opts, UseMultiplicity);
     std::string repl = llvm::formatv("sv_set_undef({0})", argString(0));
     auto hint = FixItHint::CreateReplacement(matchedCall->getSourceRange(), repl);
     diag(matchedCall->getExprLoc(), "sv_setsv(..., &PL_sv_undef) better written as sv_set_undef()") << hint;
