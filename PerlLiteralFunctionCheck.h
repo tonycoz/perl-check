@@ -39,7 +39,7 @@ public:
   //  LengthArgNum_ - which argument (ignoring aTHX) in the final call
   //    to the underlying the Perl_ prefix function is the length of the
   //    string.
-  //  KeepArgs_ - int vector of arguments from the call to the Perl_
+  //  KeepArgs_ - rvalue int vector of arguments from the call to the Perl_
   //    prefix function end up in the FixItHint replacement
   //
   PerlLiteralFunctionCheck(llvm::StringRef Name,

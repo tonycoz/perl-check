@@ -26,6 +26,13 @@ public:
                 1, 2, std::vector{ 0, 1 });
           });
       CheckFactories.registerCheckFactory(
+          "perl-literal-sv_setpvn_mg",
+          [](llvm::StringRef Name, ClangTidyContext *Context){
+            return std::make_unique<PerlLiteralFunctionCheck>(
+                Name, Context, "sv_setpvn_mg", "sv_setpvs_mg",
+                1, 2, std::vector{ 0, 1 });
+          });
+      CheckFactories.registerCheckFactory(
           "perl-literal-newSVpvn",
           [](llvm::StringRef Name, ClangTidyContext *Context){
             return std::make_unique<PerlLiteralFunctionCheck>(
@@ -60,7 +67,9 @@ public:
                 Name, Context, "savepvn", "savepvs",
                 0, 1, std::vector{ 0 });
           });
+
       CheckFactories.registerCheck<PerlUndefSetsvCheck>("perl-undef-sv_setsv");
+
       CheckFactories.registerCheckFactory(
           "perl-mortal-newSVpvn",
           [](llvm::StringRef Name, ClangTidyContext *Context) {

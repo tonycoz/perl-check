@@ -11,6 +11,7 @@ function(add_run_clang_tidy_test check_name)
 endfunction()
 
 add_run_clang_tidy_test(perl-literal-sv_setpvn)
+add_run_clang_tidy_test(perl-literal-sv_setpvn_mg)
 add_run_clang_tidy_test(perl-literal-newSVpvn)
 add_run_clang_tidy_test(perl-literal-newSVpvn_flags)
 add_run_clang_tidy_test(perl-literal-hv_fetch)
