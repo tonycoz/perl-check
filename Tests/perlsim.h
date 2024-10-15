@@ -1,6 +1,7 @@
 #include <stddef.h>
 
 typedef struct sv { unsigned r; } SV;
+typedef struct cv { unsigned r; } CV;
 
 #ifdef MULTIPLICITY
 struct PerlInterpreter {
@@ -34,3 +35,5 @@ int buflen;
 #define SVf_UTF8 0x02
 #define SV_CATBYTES 0x100
 #define SV_CATUTF8 0x200
+
+#define GV_ADD 1

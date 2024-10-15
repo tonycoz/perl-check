@@ -74,6 +74,13 @@ public:
                 Name, Context, "savepvn", "savepvs",
                 0, 1, std::vector{ 0 });
           });
+      CheckFactories.registerCheckFactory(
+          "perl-literal-get_cvn_flags",
+          [](llvm::StringRef Name, ClangTidyContext *Context){
+            return std::make_unique<PerlLiteralFunctionCheck>(
+                Name, Context, "get_cvn_flags", "get_cvs",
+                0, 1, std::vector{ 0, 2 });
+          });
 
       CheckFactories.registerCheck<PerlUndefSetsvCheck>("perl-undef-sv_setsv");
 

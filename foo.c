@@ -30,7 +30,7 @@ extern void Perl_sv_catpvn(pTHX_ SV *sv, const char *s, size_t len);
 
 extern void Perl_sv_catpvn_flags(pTHX_ SV *sv, const char *s, size_t len, int flags);
 #define sv_catpvn_flags(sv, s, len, flags) Perl_sv_catpvn_flags(aTHX_ sv, s, len, flags)
-#define sv_catpvs_flags(sv, s, flags) Perl_sv_catpvn(aTHX_ sv, s "", sizeof(s "")-1, flags)
+#define sv_catpvs_flags(sv, s, flags) Perl_sv_catpvn_flags(aTHX_ sv, s "", sizeof(s "")-1, flags)
 
 extern void Perl_sv_setsv(pTHX_ SV *dsv, SV *ssv);
 extern void Perl_sv_set_undef(pTHX_ SV *dsv);
@@ -44,6 +44,10 @@ extern char *Perl_savepvn(pTHX_ const char *s, size_t len);
 #define savepvn(s, len) Perl_savepvn(aTHX_ s, len)
 #define savepvs(s) Perl_savepvn(aTHX_ s "", sizeof(s "")-1)
 
+extern CV *Perl_get_cvn_flags(pTHX_ const char *s, size_t len, int flags);
+#define get_cvn_flags(s, len, flags) Perl_get_cvn_flags(aTHX_ s, len, flags)
+#define get_cvs(s, flags) Perl_get_cvn_flags(aTHX_ s "", sizeof(s ""), flags)
+
 char buf[10];
 int buflen;
 
@@ -51,6 +55,7 @@ int buflen;
 #define WARNbits_size 4
 
 extern SV *my_sv;
+extern CV *my_cv;
 
 void foo(pTHX_ SV *sv, HV *hv) {
   sv_setpvn(sv, "Foo", 3);
@@ -77,6 +82,11 @@ void foo(pTHX_ SV *sv, HV *hv) {
 
   char *p = savepvn("Foo", 3);
   p = savepvs("Foo");
+
+  my_cv = get_cvn_flags("func", 4, 0);
+  my_cv = get_cvn_flags(buf, buflen, GV_ADD);
+  my_cv = get_cvn_flags("func", 3, GV_ADD);
+  my_cv = get_cvs("bar", 0);
 
   sv_setsv(sv, &PL_sv_undef);
   sv_set_undef(sv);

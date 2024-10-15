@@ -1,0 +1,16 @@
+perl-literal-get_cvn_flags.c:10:11: warning: get_cvn_flags() with literal better written as get_cvs() [perl-literal-get_cvn_flags]
+   10 |   my_cv = get_cvn_flags("func", 4, 0);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           get_cvs("func", 0)
+perl-literal-get_cvn_flags.c:10:11: note: FIX-IT applied suggested code changes
+perl-literal-get_cvn_flags.c:4:38: note: expanded from macro 'get_cvn_flags'
+    4 | #define get_cvn_flags(s, len, flags) Perl_get_cvn_flags(aTHX_ s, len, flags)
+      |                                      ^
+perl-literal-get_cvn_flags.c:11:11: warning: get_cvn_flags() with literal better written as get_cvs() [perl-literal-get_cvn_flags]
+   11 |   my_cv = get_cvn_flags("func", sizeof("func")-1, 0);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           get_cvs("func", 0)
+perl-literal-get_cvn_flags.c:11:11: note: FIX-IT applied suggested code changes
+perl-literal-get_cvn_flags.c:4:38: note: expanded from macro 'get_cvn_flags'
+    4 | #define get_cvn_flags(s, len, flags) Perl_get_cvn_flags(aTHX_ s, len, flags)
+      |                                      ^

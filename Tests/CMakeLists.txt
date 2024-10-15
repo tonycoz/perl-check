@@ -18,6 +18,7 @@ add_run_clang_tidy_test(perl-literal-hv_fetch)
 add_run_clang_tidy_test(perl-literal-sv_catpvn)
 add_run_clang_tidy_test(perl-literal-sv_catpvn_flags)
 add_run_clang_tidy_test(perl-literal-savepvn)
+add_run_clang_tidy_test(perl-literal-get_cvn_flags)
 
 add_run_clang_tidy_test(perl-undef-sv_setsv)
 
