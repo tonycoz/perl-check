@@ -28,6 +28,9 @@ extern void Perl_sv_catpvn(pTHX_ SV *sv, const char *s, size_t len);
 #define sv_catpvn(sv, s, len) Perl_sv_catpvn(aTHX_ sv, s, len)
 #define sv_catpvs(sv, s) Perl_sv_catpvn(aTHX_ sv, s "", sizeof(s "")-1)
 
+extern void Perl_sv_catpvn_flags(pTHX_ SV *sv, const char *s, size_t len, int flags);
+#define sv_catpvn_flags(sv, s, len, flags) Perl_sv_catpvn_flags(aTHX_ sv, s, len, flags)
+#define sv_catpvs_flags(sv, s, flags) Perl_sv_catpvn(aTHX_ sv, s "", sizeof(s "")-1, flags)
 
 extern void Perl_sv_setsv(pTHX_ SV *dsv, SV *ssv);
 extern void Perl_sv_set_undef(pTHX_ SV *dsv);
@@ -68,6 +71,9 @@ void foo(pTHX_ SV *sv, HV *hv) {
 
   sv_catpvn(sv, "Foo", 3);
   sv_catpvs(sv, "Foo");
+
+  sv_catpvn_flags(sv, "Foo", 3, SV_CATBYTES);
+  sv_catpvs_flags(sv, "Foo", SV_CATBYTES);
 
   char *p = savepvn("Foo", 3);
   p = savepvs("Foo");

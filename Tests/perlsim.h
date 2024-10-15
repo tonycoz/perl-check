@@ -32,3 +32,5 @@ int buflen;
 // some value
 #define SVs_TEMP 0x01
 #define SVf_UTF8 0x02
+#define SV_CATBYTES 0x100
+#define SV_CATUTF8 0x200

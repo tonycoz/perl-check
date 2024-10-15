@@ -1,0 +1,30 @@
+perl-literal-sv_catpvn_flags.c:8:3: warning: sv_catpvn_flags() with literal better written as sv_catpvs_flags() [perl-literal-sv_catpvn_flags]
+    8 |   sv_catpvn_flags(sv, "Foo", 3, SV_CATBYTES);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_catpvs_flags(sv, "Foo", SV_CATBYTES)
+perl-literal-sv_catpvn_flags.c:8:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_catpvn_flags.c:4:44: note: expanded from macro 'sv_catpvn_flags'
+    4 | #define sv_catpvn_flags(sv, s, len, flags) Perl_sv_catpvn_flags(aTHX_ sv, s, len, flags)
+      |                                            ^
+perl-literal-sv_catpvn_flags.c:9:3: warning: sv_catpvn_flags() with literal better written as sv_catpvs_flags() [perl-literal-sv_catpvn_flags]
+    9 |   sv_catpvn_flags(sv, "foo", sizeof("foo")-1, SV_CATBYTES);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_catpvs_flags(sv, "foo", SV_CATBYTES)
+perl-literal-sv_catpvn_flags.c:9:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_catpvn_flags.c:4:44: note: expanded from macro 'sv_catpvn_flags'
+    4 | #define sv_catpvn_flags(sv, s, len, flags) Perl_sv_catpvn_flags(aTHX_ sv, s, len, flags)
+      |                                            ^
+perl-literal-sv_catpvn_flags.c:12:3: warning: length too long for literal [perl-literal-sv_catpvn_flags]
+   12 |   sv_catpvn_flags(sv, "foo", 4, SV_CATBYTES);
+      |   ^
+perl-literal-sv_catpvn_flags.c:4:44: note: expanded from macro 'sv_catpvn_flags'
+    4 | #define sv_catpvn_flags(sv, s, len, flags) Perl_sv_catpvn_flags(aTHX_ sv, s, len, flags)
+      |                                            ^
+perl-literal-sv_catpvn_flags.c:13:3: warning: sv_catpvn_flags() with literal better written as sv_catpvs_flags() [perl-literal-sv_catpvn_flags]
+   13 |   sv_catpvn_flags(sv, WARNbits, WARNbits_size, SV_CATBYTES);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_catpvs_flags(sv, WARNbits, SV_CATBYTES)
+perl-literal-sv_catpvn_flags.c:13:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_catpvn_flags.c:4:44: note: expanded from macro 'sv_catpvn_flags'
+    4 | #define sv_catpvn_flags(sv, s, len, flags) Perl_sv_catpvn_flags(aTHX_ sv, s, len, flags)
+      |                                            ^
