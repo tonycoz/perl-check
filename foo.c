@@ -24,13 +24,26 @@ extern SV **Perl_hv_fetch(pTHX_ HV *hv, const char *s, size_t len, int lval);
 #define hv_fetch(hv, s, len, lval) Perl_hv_fetch(aTHX_ hv, s, len, lval)
 #define hv_fetchs(sv, s, lval) Perl_hv_fetch(aTHX_ sv, s "", sizeof(s "")-1, lval)
 
-extern void Perl_sv_catpvn(pTHX_ SV *sv, const char *s, size_t len);
-#define sv_catpvn(sv, s, len) Perl_sv_catpvn(aTHX_ sv, s, len)
-#define sv_catpvs(sv, s) Perl_sv_catpvn(aTHX_ sv, s "", sizeof(s "")-1)
-
 extern void Perl_sv_catpvn_flags(pTHX_ SV *sv, const char *s, size_t len, int flags);
-#define sv_catpvn_flags(sv, s, len, flags) Perl_sv_catpvn_flags(aTHX_ sv, s, len, flags)
-#define sv_catpvs_flags(sv, s, flags) Perl_sv_catpvn_flags(aTHX_ sv, s "", sizeof(s "")-1, flags)
+#define sv_catpvn(sv, s, len) \
+  Perl_sv_catpvn_flags(aTHX_ sv, s, len, SV_GMAGIC)
+#define sv_catpvs(sv, s) \
+  Perl_sv_catpvn_flags(aTHX_ sv, s "", sizeof(s "")-1, SV_GMAGIC)
+
+#define sv_catpvn_flags(sv, s, len, flags) \
+  Perl_sv_catpvn_flags(aTHX_ sv, s, len, flags)
+#define sv_catpvs_flags(sv, s, flags) \
+  Perl_sv_catpvn_flags(aTHX_ sv, s "", sizeof(s "")-1, flags)
+
+#define sv_catpvs_nomg(dsv, str) \
+  Perl_sv_catpvn_flags(aTHX_ dsv, s "", sizeof(s "")-1, 0)
+#define sv_catpvn_nomg(sv, s, len) \
+  Perl_sv_catpvn_flags(aTHX_ sv, s, len, 0)
+
+#define sv_catpvs_mg(dsv, str) \
+  Perl_sv_catpvn_flags(aTHX_ dsv, s "", sizeof(s "")-1, SV_GMAGIC|SV_SMAGIC)
+#define sv_catpvn_mg(sv, s, len) \
+  Perl_sv_catpvn_flags(aTHX_ sv, s, len, SV_GMAGIC|SV_SMAGIC)
 
 extern void Perl_sv_setsv(pTHX_ SV *dsv, SV *ssv);
 extern void Perl_sv_set_undef(pTHX_ SV *dsv);
@@ -79,6 +92,12 @@ void foo(pTHX_ SV *sv, HV *hv) {
 
   sv_catpvn_flags(sv, "Foo", 3, SV_CATBYTES);
   sv_catpvs_flags(sv, "Foo", SV_CATBYTES);
+
+  sv_catpvn_nomg(sv, "Foo", 3);
+  sv_catpvs_nomg(sv, "Foo");
+
+  sv_catpvn_mg(sv, "Foo", 3);
+  sv_catpvs_mg(sv, "Foo");
 
   char *p = savepvn("Foo", 3);
   p = savepvs("Foo");

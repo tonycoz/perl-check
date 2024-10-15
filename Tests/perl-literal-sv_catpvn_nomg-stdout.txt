@@ -1,0 +1,30 @@
+perl-literal-sv_catpvn_nomg.c:10:3: warning: sv_catpvn_nomg() with literal better written as sv_catpvs_nomg() [perl-literal-sv_catpvn_nomg]
+   10 |   sv_catpvn_nomg(sv, "Foo", 3);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_catpvs_nomg(sv, "Foo")
+perl-literal-sv_catpvn_nomg.c:10:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_catpvn_nomg.c:5:3: note: expanded from macro 'sv_catpvn_nomg'
+    5 |   Perl_sv_catpvn_flags(aTHX_ sv, s, len, 0)
+      |   ^
+perl-literal-sv_catpvn_nomg.c:11:3: warning: sv_catpvn_nomg() with literal better written as sv_catpvs_nomg() [perl-literal-sv_catpvn_nomg]
+   11 |   sv_catpvn_nomg(sv, "foo", sizeof("foo")-1);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_catpvs_nomg(sv, "foo")
+perl-literal-sv_catpvn_nomg.c:11:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_catpvn_nomg.c:5:3: note: expanded from macro 'sv_catpvn_nomg'
+    5 |   Perl_sv_catpvn_flags(aTHX_ sv, s, len, 0)
+      |   ^
+perl-literal-sv_catpvn_nomg.c:14:3: warning: length too long for literal [perl-literal-sv_catpvn_nomg]
+   14 |   sv_catpvn_nomg(sv, "foo", 4);
+      |   ^
+perl-literal-sv_catpvn_nomg.c:5:3: note: expanded from macro 'sv_catpvn_nomg'
+    5 |   Perl_sv_catpvn_flags(aTHX_ sv, s, len, 0)
+      |   ^
+perl-literal-sv_catpvn_nomg.c:15:3: warning: sv_catpvn_nomg() with literal better written as sv_catpvs_nomg() [perl-literal-sv_catpvn_nomg]
+   15 |   sv_catpvn_nomg(sv, WARNbits, WARNbits_size);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   sv_catpvs_nomg(sv, WARNbits)
+perl-literal-sv_catpvn_nomg.c:15:3: note: FIX-IT applied suggested code changes
+perl-literal-sv_catpvn_nomg.c:5:3: note: expanded from macro 'sv_catpvn_nomg'
+    5 |   Perl_sv_catpvn_flags(aTHX_ sv, s, len, 0)
+      |   ^

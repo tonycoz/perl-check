@@ -35,5 +35,7 @@ int buflen;
 #define SVf_UTF8 0x02
 #define SV_CATBYTES 0x100
 #define SV_CATUTF8 0x200
+#define SV_GMAGIC 0x400
+#define SV_SMAGIC 0x800
 
 #define GV_ADD 1

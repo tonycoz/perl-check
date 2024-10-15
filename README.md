@@ -108,6 +108,7 @@ builtin.c:572:9: warning: sv_setsv(..., &PL_sv_undef) better written as sv_set_u
 * `perl-literal-newSVpvn_flags`
 * `perl-literal-sv_catpvn`
 * `perl-literal-sv_catpvn_flags`
+* `perl-literal-sv_catpvn_nomg`
 * `perl-literal-savepvn`
 * `perl-literal-get_cvn_flags`
 

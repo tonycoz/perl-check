@@ -68,6 +68,13 @@ public:
                 1, 2, std::vector{ 0, 1, 3 });
           });
       CheckFactories.registerCheckFactory(
+          "perl-literal-sv_catpvn_nomg",
+          [](llvm::StringRef Name, ClangTidyContext *Context){
+            return std::make_unique<PerlLiteralFunctionCheck>(
+                Name, Context, "sv_catpvn_nomg", "sv_catpvs_nomg",
+                1, 2, std::vector{ 0, 1 });
+          });
+      CheckFactories.registerCheckFactory(
           "perl-literal-savepvn",
           [](llvm::StringRef Name, ClangTidyContext *Context){
             return std::make_unique<PerlLiteralFunctionCheck>(
