@@ -10,6 +10,9 @@ extern void Perl_sv_setpvn_mg(pTHX_ SV *sv, const char *s, size_t len);
 #define sv_setpvn_mg(sv, s, len) Perl_sv_setpvn_mg(aTHX_ sv, s, len)
 #define sv_setpvs_mg(sv, s) Perl_sv_setpvn_mg(aTHX_ sv, s "", sizeof(s "")-1)
 
+extern void Perl_sv_setpv(pTHX_ SV *sv, const char *s);
+#define sv_setpv(sv, s) Perl_sv_setpv(aTHX_ sv, s)
+
 extern SV *Perl_newSVpvn(pTHX_ const char *s, size_t len);
 #define newSVpvn(s, len) Perl_newSVpvn(aTHX_ s, len)
 #define newSVpvs(s) Perl_newSVpvn(aTHX_ s, sizeof(s "")-1)
@@ -35,12 +38,12 @@ extern void Perl_sv_catpvn_flags(pTHX_ SV *sv, const char *s, size_t len, int fl
 #define sv_catpvs_flags(sv, s, flags) \
   Perl_sv_catpvn_flags(aTHX_ sv, s "", sizeof(s "")-1, flags)
 
-#define sv_catpvs_nomg(dsv, str) \
+#define sv_catpvs_nomg(dsv, s) \
   Perl_sv_catpvn_flags(aTHX_ dsv, s "", sizeof(s "")-1, 0)
 #define sv_catpvn_nomg(sv, s, len) \
   Perl_sv_catpvn_flags(aTHX_ sv, s, len, 0)
 
-#define sv_catpvs_mg(dsv, str) \
+#define sv_catpvs_mg(dsv, s) \
   Perl_sv_catpvn_flags(aTHX_ dsv, s "", sizeof(s "")-1, SV_GMAGIC|SV_SMAGIC)
 #define sv_catpvn_mg(sv, s, len) \
   Perl_sv_catpvn_flags(aTHX_ sv, s, len, SV_GMAGIC|SV_SMAGIC)
@@ -113,6 +116,11 @@ void foo(pTHX_ SV *sv, HV *hv) {
   my_sv = sv_2mortal(newSVpvn(buf, buflen));
   my_sv = sv_2mortal(newSVpvs("test"));
   my_sv = sv_2mortal(newSVpvn_flags(buf, buflen, SVf_UTF8));
+
+  sv_setpv(sv, NULL);
+  sv_setpv(sv, buf);
+  sv_setpv(sv, "Hello");
+  sv_setpvn(sv, NULL, 0);
 }
 
 void awesome_foo() { }

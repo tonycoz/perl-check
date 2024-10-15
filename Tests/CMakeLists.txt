@@ -22,5 +22,7 @@ add_run_clang_tidy_test(perl-literal-savepvn)
 add_run_clang_tidy_test(perl-literal-get_cvn_flags)
 
 add_run_clang_tidy_test(perl-undef-sv_setsv)
+add_run_clang_tidy_test(perl-undef-sv_setpv)
+add_run_clang_tidy_test(perl-undef-sv_setpvn)
 
 add_run_clang_tidy_test(perl-mortal-newSVpvn)

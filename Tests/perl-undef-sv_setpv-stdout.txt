@@ -1,0 +1,16 @@
+perl-undef-sv_setpv.c:10:3: warning: sv_setpv(..., NULL) better written as sv_set_undef() [perl-undef-sv_setpv]
+   10 |   sv_setpv(sv, NULL);
+      |   ^~~~~~~~~~~~~~~~~~
+      |   sv_set_undef(sv)
+perl-undef-sv_setpv.c:10:3: note: FIX-IT applied suggested code changes
+perl-undef-sv_setpv.c:4:26: note: expanded from macro 'sv_setpv'
+    4 | #define sv_setpv(dsv, s) Perl_sv_setpv(aTHX_ dsv, s)
+      |                          ^
+perl-undef-sv_setpv.c:11:3: warning: sv_setpv(..., NULL) better written as sv_set_undef() [perl-undef-sv_setpv]
+   11 |   sv_setpv(sv, 0);
+      |   ^~~~~~~~~~~~~~~
+      |   sv_set_undef(sv)
+perl-undef-sv_setpv.c:11:3: note: FIX-IT applied suggested code changes
+perl-undef-sv_setpv.c:4:26: note: expanded from macro 'sv_setpv'
+    4 | #define sv_setpv(dsv, s) Perl_sv_setpv(aTHX_ dsv, s)
+      |                          ^
