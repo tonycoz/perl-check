@@ -96,13 +96,13 @@ public:
           "perl-undef-sv_setpv",
           [](llvm::StringRef Name, ClangTidyContext *Context) {
             return std::make_unique<PerlUndefSetpvXCheck>(
-                Name, Context, "sv_setpv");
+                 Name, Context, "sv_setpv", "Perl_sv_setpv");
           });
       CheckFactories.registerCheckFactory(
           "perl-undef-sv_setpvn",
           [](llvm::StringRef Name, ClangTidyContext *Context) {
             return std::make_unique<PerlUndefSetpvXCheck>(
-                Name, Context, "sv_setpvn");
+                Name, Context, "sv_setpvn", "Perl_sv_setpvn");
           });
 
       CheckFactories.registerCheckFactory(
