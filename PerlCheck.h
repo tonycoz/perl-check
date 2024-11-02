@@ -9,6 +9,8 @@
 namespace {
   using namespace clang;
   using namespace clang::ast_matchers;
+
+  // a wrapper used to simplify fetching function call arguments
   auto
     getArgText(const CallExpr *call, const MatchFinder::MatchResult &Result,
                const LangOptions &Opts, const bool UseMultiplicity) {
@@ -19,7 +21,7 @@ namespace {
               call->getArg(UseMultiplicity+ArgNum)->getSourceRange()
           ),
           *SourceManager, Opts
-       ).operator std::string_view();
+       );
     };
   }
 }
