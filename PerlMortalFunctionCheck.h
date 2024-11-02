@@ -24,7 +24,7 @@ class PerlMortalFunctionCheck : public clang::tidy::ClangTidyCheck
   int InFlagsArgNum;
   // parameter indexes from the Perl_ function call to include in the
   // FixItHint.  Should include a -1 entry for the flags.
-  std::vector<int> KeepArgs;
+  llvm::SmallVector<int> KeepArgs;
   // Default flags if the InFlagsArgNum is -1
   std::string_view DefaultFlags;
 public:
@@ -41,7 +41,7 @@ public:
       llvm::StringRef Name, clang::tidy::ClangTidyContext* Context,
       llvm::StringRef OrigMacro_, llvm::StringRef ReplacementMacro_,
       int InFlagsArgNum_,
-      std::vector<int> &&KeepArgs_, std::string_view DefaultFlags = ""sv);
+      llvm::SmallVector<int> &&KeepArgs_, std::string_view DefaultFlags = ""sv);
   void registerMatchers(clang::ast_matchers::MatchFinder* Finder) override;
   void check(const clang::ast_matchers::MatchFinder::MatchResult& Result) override;
 };

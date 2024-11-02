@@ -10,7 +10,7 @@ PerlMortalFunctionCheck::PerlMortalFunctionCheck(
     StringRef Name, ClangTidyContext* Context,
     StringRef OrigMacro_, StringRef ReplacementMacro_,
     int InFlagsArgNum_,
-    std::vector<int> &&KeepArgs_, std::string_view DefaultFlags_) :
+    llvm::SmallVector<int> &&KeepArgs_, std::string_view DefaultFlags_) :
     ClangTidyCheck(Name, Context),
     UseMultiplicity(Options.getLocalOrGlobal("PerlCheckMultiplicity", 0)),
     OrigMacro(OrigMacro_),

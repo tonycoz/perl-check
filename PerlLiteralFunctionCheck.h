@@ -28,7 +28,7 @@ class PerlLiteralFunctionCheck : public clang::tidy::ClangTidyCheck
   int LengthArgNum;
   // parameter indexes from the Perl_ function call to include in the
   // FixItHint.
-  std::vector<int> KeepArgs;
+  llvm::SmallVector<int> KeepArgs;
 public:
   // Construct a new check
   //  Name, Context - passed to base constructor
@@ -46,7 +46,7 @@ public:
                            clang::tidy::ClangTidyContext* Context,
                            llvm::StringRef PvnMacro_, llvm::StringRef PvsMacro_,
                            int LiteralArgNum_, int LengthArgNum_,
-                           std::vector<int> &&KeepArgs_);
+                           llvm::SmallVector<int> &&KeepArgs_);
   void registerMatchers(clang::ast_matchers::MatchFinder* Finder) override;
   void check(const clang::ast_matchers::MatchFinder::MatchResult& Result) override;
 };

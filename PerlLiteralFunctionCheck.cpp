@@ -10,7 +10,7 @@ PerlLiteralFunctionCheck::PerlLiteralFunctionCheck(
     StringRef Name, ClangTidyContext* Context,
     StringRef PvnMacro_, StringRef PvsMacro_,
     int LiteralArgNum_, int LengthArgNum_,
-    std::vector<int> &&KeepArgs_) :
+    llvm::SmallVector<int> &&KeepArgs_) :
     ClangTidyCheck(Name, Context),
     UseMultiplicity(Options.getLocalOrGlobal("PerlCheckMultiplicity", 0)),
     PvnMacro(PvnMacro_),
