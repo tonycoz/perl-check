@@ -31,7 +31,8 @@ void PerlLiteralFunctionCheck::registerMatchers(MatchFinder* Finder)
                              traverse(TK_IgnoreUnlessSpelledInSource,
                                       stringLiteral().bind("literal"))
                  ),
-                 hasArgument(LengthArgNum+UseMultiplicity, anything())
+                 hasArgument(LengthArgNum+UseMultiplicity,
+                             expr().bind("size"))
         ).bind("call"), this);
 }
 
@@ -40,8 +41,7 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
     const auto *matchedCall = Result.Nodes.getNodeAs<CallExpr>("call");
     const auto *strLit = Result.Nodes.getNodeAs<StringLiteral>("literal");
 
-    const auto sizeArg = matchedCall->getArg(UseMultiplicity+LengthArgNum)
-      ->IgnoreUnlessSpelledInSource();
+    const auto sizeArg = Result.Nodes.getNodeAs<Expr>("size");
     Expr::EvalResult sizeIntResult;
     if (!sizeArg->EvaluateAsInt(sizeIntResult, *Result.Context)
         || !sizeIntResult.Val.isInt())
