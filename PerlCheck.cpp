@@ -113,6 +113,16 @@ public:
                 -1, llvm::SmallVector{ 0, 1, -1 }, "SVs_TEMP"sv
                 );
           });
+#if 1
+      CheckFactories.registerCheckFactory(
+          "perl-mortal-newSVsv",
+          [](llvm::StringRef Name, ClangTidyContext *Context) {
+            return std::make_unique<PerlMortalFunctionCheck>(
+                Name, Context, "newSVsv", "sv_mortalcopy",
+                -1, llvm::SmallVector{ 0 }, ""sv, false
+                );
+          });
+#endif
     }
 };
 

@@ -27,6 +27,8 @@ class PerlMortalFunctionCheck : public clang::tidy::ClangTidyCheck
   llvm::SmallVector<int> KeepArgs;
   // Default flags if the InFlagsArgNum is -1
   std::string_view DefaultFlags;
+  // try to do a fix it (some perl macros confuse clang-tidy)
+  bool DoFixIt;
 public:
   // Construct a new check
   //  Name, Context - passed to base constructor
@@ -41,7 +43,9 @@ public:
       llvm::StringRef Name, clang::tidy::ClangTidyContext* Context,
       llvm::StringRef OrigMacro_, llvm::StringRef ReplacementMacro_,
       int InFlagsArgNum_,
-      llvm::SmallVector<int> &&KeepArgs_, std::string_view DefaultFlags = ""sv);
+      llvm::SmallVector<int> &&KeepArgs_,
+      std::string_view DefaultFlags_ = ""sv,
+      bool DoFixIt_ = true);
   void registerMatchers(clang::ast_matchers::MatchFinder* Finder) override;
   void check(const clang::ast_matchers::MatchFinder::MatchResult& Result) override;
 };

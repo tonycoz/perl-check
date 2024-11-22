@@ -1,0 +1,6 @@
+perl-mortal-newSVsv.c:15:11: warning: sv_2mortal(newSVsv(...)) better written as sv_mortalcopy() [perl-mortal-newSVsv]
+   15 |   my_sv = sv_2mortal(newSVsv(sv));
+      |           ^
+perl-mortal-newSVsv.c:10:24: note: expanded from macro 'sv_2mortal'
+   10 | #define sv_2mortal(sv) Perl_sv_2mortal(aTHX_ sv)
+      |                        ^

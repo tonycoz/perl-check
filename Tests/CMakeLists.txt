@@ -26,3 +26,4 @@ add_run_clang_tidy_test(perl-undef-sv_setpv)
 add_run_clang_tidy_test(perl-undef-sv_setpvn)
 
 add_run_clang_tidy_test(perl-mortal-newSVpvn)
+add_run_clang_tidy_test(perl-mortal-newSVsv)

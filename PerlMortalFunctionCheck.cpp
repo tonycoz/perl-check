@@ -10,18 +10,21 @@ PerlMortalFunctionCheck::PerlMortalFunctionCheck(
     StringRef Name, ClangTidyContext* Context,
     StringRef OrigMacro_, StringRef ReplacementMacro_,
     int InFlagsArgNum_,
-    llvm::SmallVector<int> &&KeepArgs_, std::string_view DefaultFlags_) :
+    llvm::SmallVector<int> &&KeepArgs_,
+    std::string_view DefaultFlags_,
+    bool DoFixIt_) :
     ClangTidyCheck(Name, Context),
     UseMultiplicity(Options.getLocalOrGlobal("PerlCheckMultiplicity", 0)),
     OrigMacro(OrigMacro_),
     ReplacementMacro(ReplacementMacro_),
     InFlagsArgNum(InFlagsArgNum_),
     KeepArgs(KeepArgs_),
-    DefaultFlags(DefaultFlags_)
+    DefaultFlags(DefaultFlags_),
+    DoFixIt(DoFixIt_)
 {
-  assert(KeepArgs.size() > 0);
-  // need either input flags or text for default flags
-  assert(InFlagsArgNum > 0 || DefaultFlags.size() > 0);
+  // I used to assert on flags being on input or in DefaultFlags, but
+  // the sv_mortalcopy() replacement doesn't need this.
+  assert(!KeepArgs.empty());
 }  
 
 void PerlMortalFunctionCheck::registerMatchers(MatchFinder* Finder)
@@ -36,7 +39,6 @@ void PerlMortalFunctionCheck::registerMatchers(MatchFinder* Finder)
                     TK_IgnoreUnlessSpelledInSource,
                     callExpr(
                         isExpandedFromMacro(OrigMacro)
-                        // can I get the flags arg in here?
                     ).bind("call")
                 )
             )
@@ -51,30 +53,51 @@ void PerlMortalFunctionCheck::check(const MatchFinder::MatchResult& Result)
     Result.Nodes.getNodeAs<CallExpr>("call");
   const LangOptions &Opts = getLangOpts();
 
-  auto argString = getArgText(matchedCall, Result, Opts, UseMultiplicity);
+  // srepl << Lexer::getSourceText(
+  //         CharSourceRange::getTokenRange(
+  //             matchedCall->getSourceRange()
+  //         ),
+  //         *Result.SourceManager, Opts
+  //                              );
+  auto addHint = [&](auto &d){
+    if (DoFixIt) {
+      // I want a better way to do this
+      // clang::DiagnosticBuilder (returned by diag) is nethier copiable
+      // not movable, so I can't use a common variable for the two
+      // branches of the if DefaultFlags.size
+      auto argString = getArgText(matchedCall, Result, Opts, UseMultiplicity);
 
-  std::string repl;
-  llvm::raw_string_ostream srepl{repl};
-  srepl.reserveExtraSpace(80); // typically enough
+      std::string repl;
+      llvm::raw_string_ostream srepl{repl};
+      srepl.reserveExtraSpace(80); // typically enough
   
-  assert(KeepArgs[0] != -1); // don't handle flags in first parameter
-  srepl << ReplacementMacro << '(' << argString(KeepArgs[0]);
-  for (auto i = std::next(KeepArgs.begin()); i != KeepArgs.end(); ++i) {
-    srepl << ", ";
-    if (*i == -1) {
-      if (InFlagsArgNum == -1) {
-        srepl << DefaultFlags;
+      assert(KeepArgs[0] != -1); // don't handle flags in first parameter
+      srepl << ReplacementMacro << '(' << argString(KeepArgs[0]);
+      for (auto i = std::next(KeepArgs.begin()); i != KeepArgs.end(); ++i) {
+        srepl << ", ";
+        if (*i == -1) {
+          if (InFlagsArgNum == -1) {
+            srepl << DefaultFlags;
+          }
+          else {
+            srepl << argString(*i) << " | SVs_TEMP";
+          }
+        }
+        else {
+          srepl << argString(*i);
+        }
       }
-      else {
-        srepl << argString(*i) << " | SVs_TEMP";
-      }
+      srepl << ')';
+      auto hint = FixItHint::CreateReplacement(sv_2mortalCall->getSourceRange(), repl);
+      d << hint;
     }
-    else {
-      srepl << argString(*i);
-    }
+  };
+  if (DefaultFlags.size()) {
+    addHint(diag(sv_2mortalCall->getExprLoc(), "sv_2mortal(%0(...)) better written with SVs_TEMP")
+            << OrigMacro);
   }
-  srepl << ')';
-  auto hint = FixItHint::CreateReplacement(sv_2mortalCall->getSourceRange(), repl);
-  diag(sv_2mortalCall->getExprLoc(), "sv_2mortal(%0(...)) better written with SVs_TEMP")
-    << OrigMacro << hint;
+  else {
+    addHint(diag(sv_2mortalCall->getExprLoc(), "sv_2mortal(%0(...)) better written as %1()")
+            << OrigMacro << ReplacementMacro);
+  }
 }

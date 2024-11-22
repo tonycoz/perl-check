@@ -64,6 +64,16 @@ extern CV *Perl_get_cvn_flags(pTHX_ const char *s, size_t len, int flags);
 #define get_cvn_flags(s, len, flags) Perl_get_cvn_flags(aTHX_ s, len, flags)
 #define get_cvs(s, flags) Perl_get_cvn_flags(aTHX_ s "", sizeof(s ""), flags)
 
+// perl declares this but doesn't use it
+extern SV *Perl_newSVsv(pTHX_ SV *old);
+extern SV *Perl_newSVsv_flags(pTHX_ SV * const old, int flags);
+extern SV *Perl_sv_mortalcopy_flags(pTHX_ SV * oldsv, unsigned flags);
+#define newSVsv(sv) Perl_newSVsv_flags(aTHX_ (sv), SV_GMAGIC|SV_NOSTEAL)
+//#define newSVsv(sv) Perl_newSVsv(aTHX_ (sv))
+#define newSVsv_flags(sv, flags) Perl_newSVsv_flags(aTHX_ sv, flags)
+#define sv_mortalcopy(sv) \
+        Perl_sv_mortalcopy_flags(aTHX_ sv, SV_GMAGIC|SV_DO_COW_SVSETSV)
+
 char buf[10];
 int buflen;
 
@@ -116,6 +126,8 @@ void foo(pTHX_ SV *sv, HV *hv) {
   my_sv = sv_2mortal(newSVpvn(buf, buflen));
   my_sv = sv_2mortal(newSVpvs("test"));
   my_sv = sv_2mortal(newSVpvn_flags(buf, buflen, SVf_UTF8));
+
+  my_sv = sv_2mortal(newSVsv(sv));
 
   sv_setpv(sv, NULL);
   sv_setpv(sv, buf);

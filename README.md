@@ -132,7 +132,14 @@ Complain about `sv_setpv(sv, NULL)` or `sv_setpvn(sv, NULL, 0)` to set
 Check for calls to the given function wrapped by `sv_2mortal()`, when
 the wrapped function has a flag to mortalize the result.
 
+* `perl-mortal-newSVsv`
+
+Check for calls to the given function wrapped by `sv_2mortal()`, when
+another API does the same *and* mortalizes.
+
+The newSVsv() check does not produce a fix it (I tried, but it
+wouldn't replace, I suspect the macros confused clang-tidy.)
+
 # FixIts
 
-Currently all the checks provide fixits, and clang-tidy can apply the
-fixes.
+Most checks provide fixits, and clang-tidy can apply the fixes.
