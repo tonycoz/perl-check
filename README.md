@@ -9,7 +9,7 @@ sv_setpvs().
 Install clang and its development libraries, I used the debs from
 apt.llvm.org, and tested with llvm 18.
 
-You also need cmake, you make also want libedit-dev.
+You also need cmake, you may also want libedit-dev.
 ```
 cmake -B build
 cmake --build build
