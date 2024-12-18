@@ -50,8 +50,6 @@ perl Makefile.PL
 bear -- make
 ```
 
-You will need to supply 
-
 # Invoking clang-tidy
 
 ```
@@ -73,6 +71,10 @@ sources matching a regular expression:
 run-clang-tidy-18 -load=path/to/build/libperl-check.so -checks='-*,perl-*' -config='{"CheckOptions":{"PerlCheckMultiplicity":1}}'
 ```
 Note the change from `--` to `-` for the options.
+
+You will need to supply `PerlCheckMultiplicity` set to 1 as in the
+above examples if your perl was built with threads, or even just
+multiplicity.
 
 # Example output
 
