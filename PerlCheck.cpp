@@ -1,3 +1,4 @@
+#include "PerlCheck.h"
 #include "PerlLiteralFunctionCheck.h"
 #include "PerlUndefSetsvCheck.h"
 #include "PerlUndefSetpvXCheck.h"
@@ -118,8 +119,8 @@ public:
           "perl-mortal-newSVsv",
           [](llvm::StringRef Name, ClangTidyContext *Context) {
             return std::make_unique<PerlMortalFunctionCheck>(
-                Name, Context, "newSVsv", "sv_mortalcopy",
-                -1, llvm::SmallVector{ 0 }, ""sv, false
+                Name, Context, "newSVsv", "sv_mortalcopy_flags",
+                -1, llvm::SmallVector{ 0, -1 }, "SV_GMAGIC|SV_NOSTEAL"sv, false
                 );
           });
 #endif
@@ -138,3 +139,49 @@ static ClangTidyModuleRegistry::Add<::PerlCheckModule> perlCheckInit(
 volatile int perlCheckAnchorSource = 0;
 
 }  // namespace clang::tidy
+
+namespace perl_check {
+
+  using perl_check::GetArgs;
+
+std::string
+MakeCall(llvm::StringRef NewName, const GetArgs &Args,
+          const llvm::SmallVector<int> &KeepArgs,
+          int InFlagsArgNum,
+          llvm::StringRef DefaultFlags, bool RealArgs) {
+  std::string result;
+  llvm::raw_string_ostream srepl{result};
+  srepl.reserveExtraSpace(80); // typically enough
+  srepl << NewName << "(";
+  srepl << Args(KeepArgs[0]);
+  for (auto i = std::next(KeepArgs.begin()); i != KeepArgs.end(); ++i) {
+    srepl << ", ";
+    if (*i == -1) {
+      if (InFlagsArgNum == -1) {
+        srepl << DefaultFlags;
+      }
+      else {
+        if (RealArgs) {
+          srepl << Args(*i);
+        }
+        else {
+          srepl << "...";
+        }
+        srepl << " | " << DefaultFlags;
+      }
+    }
+    else {
+      if (RealArgs) {
+        srepl << Args(*i);
+      }
+      else {
+        srepl << "...";
+      }
+    }
+  }
+  srepl << ")";
+
+  return result;
+}
+
+}

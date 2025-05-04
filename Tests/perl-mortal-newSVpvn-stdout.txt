@@ -1,4 +1,4 @@
-perl-mortal-newSVpvn.c:13:11: warning: sv_2mortal(newSVpvn(...)) better written with SVs_TEMP [perl-mortal-newSVpvn]
+perl-mortal-newSVpvn.c:13:11: warning: sv_2mortal(newSVpvn(...)) better written as newSVpvn_flags() with SVs_TEMP [perl-mortal-newSVpvn]
    13 |   my_sv = sv_2mortal(newSVpvn(buf, buflen));
       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       |           newSVpvn_flags(buf, buflen, SVs_TEMP)

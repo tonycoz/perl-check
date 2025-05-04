@@ -7,6 +7,7 @@
 using namespace clang;
 using namespace clang::tidy;
 using namespace clang::ast_matchers;
+using namespace perl_check;
 
 PerlUndefSetpvXCheck::PerlUndefSetpvXCheck(
     StringRef Name, ClangTidyContext* Context,

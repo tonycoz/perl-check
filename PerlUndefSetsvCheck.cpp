@@ -6,6 +6,7 @@
 using namespace clang;
 using namespace clang::tidy;
 using namespace clang::ast_matchers;
+using namespace perl_check;
 
 PerlUndefSetsvCheck::PerlUndefSetsvCheck(
     StringRef Name, ClangTidyContext* Context

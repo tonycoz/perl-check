@@ -36,6 +36,7 @@ public:
   //  ReplacmentMacro_ - replacement literal string macro like sv_setpvn_flags
   //  InFlagsArgNum_ - input argument in the underlying
   //    call that contains the flags, -1 if there are no flags
+  //  DefaultFlags_ - extra flags to set
   //  KeepArgs_ - int vector of arguments from the call to the Perl_
   //    prefix function end up in the FixItHint replacement
   //
