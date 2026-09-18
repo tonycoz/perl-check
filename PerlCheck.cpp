@@ -3,6 +3,7 @@
 #include "PerlUndefSetsvCheck.h"
 #include "PerlUndefSetpvXCheck.h"
 #include "PerlMortalFunctionCheck.h"
+#include "PerlClearSetpvsCheck.h"
 #include "clang-tidy/ClangTidy.h"
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
@@ -124,6 +125,12 @@ public:
                 );
           });
 #endif
+      CheckFactories.registerCheckFactory(
+          "perl-clear-setpvs",
+          [](llvm::StringRef Name, ClangTidyContext *Context) {
+            return std::make_unique<PerlClearSetpvsCheck>(
+                Name, Context);
+          });
     }
 };
 

@@ -384,6 +384,11 @@ Check for calls to the given function wrapped by `sv_2mortal()`, when
 The `newSVsv()` check does not produce a fix it (I tried, but it
 wouldn't replace, I suspect the macros confused clang-tidy.)
 
+* `perl-clear-setpvs`
+
+Check for calls to the given function to set an SV to an empty string
+and suggest/FIXIT `SvPVCLEAR()` instead.
+
 # FixIts
 
 Most checks provide fixits, and clang-tidy can apply the fixes.

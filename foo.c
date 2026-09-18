@@ -91,6 +91,7 @@ void foo(pTHX_ SV *sv, HV *hv) {
   sv_setpvn(sv, "foo", 4);
   sv_setpvn(sv, WARNbits, WARNbits_size);
   sv_setpvs(sv, "foo");
+  sv_setpvs(sv, "");
 
   sv_setpvn_mg(sv, "Foo", 3);
   sv_setpvn_mg(sv, "foo", sizeof("foo")-1);

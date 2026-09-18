@@ -1,0 +1,8 @@
+perl-clear-setpvs.c:8:3: warning: sv_setpvs(sv, "") better written as SvPVCLEAR(sv) [perl-clear-setpvs]
+    8 |   sv_setpvs(sv, "");
+      |   ^~~~~~~~~~~~~~~~~
+      |   SvPVCLEAR(sv)
+perl-clear-setpvs.c:8:3: note: FIX-IT applied suggested code changes
+perl-clear-setpvs.c:5:26: note: expanded from macro 'sv_setpvs'
+    5 | #define sv_setpvs(sv, s) Perl_sv_setpvn(aTHX_ sv, s "", sizeof(s "")-1)
+      |                          ^

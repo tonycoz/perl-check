@@ -21,6 +21,7 @@ add_library(perl-check MODULE
   PerlUndefSetsvCheck.cpp
   PerlMortalFunctionCheck.cpp
   PerlUndefSetpvXCheck.cpp
+  PerlClearSetpvsCheck.cpp
   )
 target_include_directories(perl-check PRIVATE ${CLANG_INCLUDE_DIRS})
 target_link_libraries(perl-check PRIVATE clang-tidy)
