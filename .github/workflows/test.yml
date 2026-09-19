@@ -1,0 +1,30 @@
+name: test
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '*'
+  pull_request:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: install package dependencies cached
+        uses: awalsh128/cache-apt-pkgs-action@v1.6.3
+        with:
+          packages: build-essential clang clang-tidy libclang-dev
+          version: 1.2
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: build
+        run: |
+            cmake -B build
+            cmake --build build -v
+      - name: test
+        run: |
+            cmake --build build --target test ARGS="--rerun-failed --output-on-failure"
