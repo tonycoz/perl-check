@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.13)
-project(PerlCheckModule C CXX)
+project(PerlCheckModule LANGUAGES C CXX VERSION 1.0.0)
 
 set(EXPORT_COMPILE_COMMANDS 1)
+
+add_compile_definitions(PERL_CHECK_VERSION="${CMAKE_PROJECT_VERSION}")
 
 get_filename_component(tmp "${CMAKE_CURRENT_SOURCE_DIR}" PATH)
 get_filename_component(CMake_SOURCE_DIR "${tmp}" PATH)
