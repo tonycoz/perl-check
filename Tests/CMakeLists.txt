@@ -29,3 +29,5 @@ add_run_clang_tidy_test(perl-mortal-newSVpvn)
 add_run_clang_tidy_test(perl-mortal-newSVsv)
 
 add_run_clang_tidy_test(perl-clear-setpvs)
+
+add_run_clang_tidy_test(perl-unsafe-newsvpv)

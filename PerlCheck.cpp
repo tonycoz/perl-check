@@ -4,6 +4,7 @@
 #include "PerlUndefSetpvXCheck.h"
 #include "PerlMortalFunctionCheck.h"
 #include "PerlClearSetpvsCheck.h"
+#include "PerlUnsafeNewsvpvCheck.h"
 #include "clang-tidy/ClangTidy.h"
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
@@ -129,6 +130,12 @@ public:
           "perl-clear-setpvs",
           [](llvm::StringRef Name, ClangTidyContext *Context) {
             return std::make_unique<PerlClearSetpvsCheck>(
+                Name, Context);
+          });
+      CheckFactories.registerCheckFactory(
+          "perl-unsafe-newsvpv",
+          [](llvm::StringRef Name, ClangTidyContext *Context) {
+            return std::make_unique<PerlUnsafeNewsvpvCheck>(
                 Name, Context);
           });
     }

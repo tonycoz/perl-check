@@ -4,8 +4,6 @@
 #include "clang/Lex/Lexer.h"
 #include "clang-tidy/ClangTidy.h"
 #include "clang-tidy/ClangTidyCheck.h"
-#include <string>
-#include <vector>
 
 class PerlUndefSetsvCheck : public clang::tidy::ClangTidyCheck
 {

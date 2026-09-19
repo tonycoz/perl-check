@@ -389,6 +389,15 @@ wouldn't replace, I suspect the macros confused clang-tidy.)
 Check for calls to the given function to set an SV to an empty string
 and suggest/FIXIT `SvPVCLEAR()` instead.
 
+* `perl-unsafe-newsvpv`
+
+Check for calls to `newSVpv()` with a non-literal second argument and
+suggest `newSVpvn()` instead.  If the second argument happens to be
+zero then `newSVpv()` will call strlen() on the string, which may
+produce an incorrect result if the string contains NULs, or just be
+wasteful.  This won't complain about non-zero literal lengths, but
+those should probably use newSVpvn() too.  Provides a FIXIT.
+
 # FixIts
 
 Most checks provide fixits, and clang-tidy can apply the fixes.

@@ -1,0 +1,24 @@
+perl-unsafe-newsvpv.c:14:11: warning: newSVpv() with non-literal length written as newSVpvn() [perl-unsafe-newsvpv]
+   14 |   my_sv = newSVpv(some_str, some_len);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           newSVpvn(some_str, some_len)
+perl-unsafe-newsvpv.c:14:11: note: FIX-IT applied suggested code changes
+perl-unsafe-newsvpv.c:5:25: note: expanded from macro 'newSVpv'
+    5 | #define newSVpv(s, len) Perl_newSVpv(aTHX_ s, len)
+      |                         ^
+perl-unsafe-newsvpv.c:15:11: warning: newSVpv() with non-literal length written as newSVpvn() [perl-unsafe-newsvpv]
+   15 |   my_sv = newSVpv("abc", some_len);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~
+      |           newSVpvn("abc", some_len)
+perl-unsafe-newsvpv.c:15:11: note: FIX-IT applied suggested code changes
+perl-unsafe-newsvpv.c:5:25: note: expanded from macro 'newSVpv'
+    5 | #define newSVpv(s, len) Perl_newSVpv(aTHX_ s, len)
+      |                         ^
+perl-unsafe-newsvpv.c:16:11: warning: newSVpv() with non-literal length written as newSVpvn() [perl-unsafe-newsvpv]
+   16 |   my_sv = newSVpv(some_str, strlen(some_str));
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           newSVpvn(some_str, strlen(some_str))
+perl-unsafe-newsvpv.c:16:11: note: FIX-IT applied suggested code changes
+perl-unsafe-newsvpv.c:5:25: note: expanded from macro 'newSVpv'
+    5 | #define newSVpv(s, len) Perl_newSVpv(aTHX_ s, len)
+      |                         ^
