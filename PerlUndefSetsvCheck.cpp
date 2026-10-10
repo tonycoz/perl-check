@@ -11,8 +11,7 @@ using namespace perl_check;
 PerlUndefSetsvCheck::PerlUndefSetsvCheck(
     StringRef Name, ClangTidyContext* Context
     ) :
-    ClangTidyCheck(Name, Context),
-    UseMultiplicity(Options.getLocalOrGlobal("PerlCheckMultiplicity", 0))
+    PerlClangTidyCheck(Name, Context)
 {
 }  
 
@@ -21,8 +20,8 @@ void PerlUndefSetsvCheck::registerMatchers(MatchFinder* Finder)
     Finder->addMatcher(
         callExpr(
             isExpandedFromMacro("sv_setsv"),
-            hasArgument(0+UseMultiplicity, expr().bind("sv")),
-            hasArgument(1+UseMultiplicity,
+            hasArgument(0+useMultiplicity(), expr().bind("sv")),
+            hasArgument(1+useMultiplicity(),
                 unaryOperator(
                     hasOperatorName("&"),
                     hasUnaryOperand(isExpandedFromMacro("PL_sv_undef"))
@@ -38,7 +37,7 @@ void PerlUndefSetsvCheck::check(const MatchFinder::MatchResult& Result)
 
     const LangOptions &Opts = getLangOpts();
 
-    auto argString = getArgText(matchedCall, Result, Opts, UseMultiplicity);
+    auto argString = getArgText(matchedCall, Result, Opts, useMultiplicity());
     std::string repl = llvm::formatv("sv_set_undef({0})", argString(0));
     auto hint = FixItHint::CreateReplacement(matchedCall->getSourceRange(), repl);
     diag(matchedCall->getExprLoc(), "sv_setsv(..., &PL_sv_undef) better written as sv_set_undef()") << hint;

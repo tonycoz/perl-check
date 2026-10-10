@@ -16,8 +16,7 @@ PerlMortalFunctionCheck::PerlMortalFunctionCheck(
     llvm::SmallVector<int> &&KeepArgs_,
     std::string_view DefaultFlags_,
     bool DoFixIt_) :
-    ClangTidyCheck(Name, Context),
-    UseMultiplicity(Options.getLocalOrGlobal("PerlCheckMultiplicity", 0)),
+    PerlClangTidyCheck(Name, Context),
     OrigMacro(OrigMacro_),
     ReplacementMacro(ReplacementMacro_),
     InFlagsArgNum(InFlagsArgNum_),
@@ -37,7 +36,7 @@ void PerlMortalFunctionCheck::registerMatchers(MatchFinder* Finder)
         callExpr(
             isExpandedFromMacro("sv_2mortal"),
             hasArgument(
-                UseMultiplicity,
+                useMultiplicity(),
                 traverse(
                     TK_IgnoreUnlessSpelledInSource,
                     callExpr(
@@ -56,7 +55,7 @@ void PerlMortalFunctionCheck::check(const MatchFinder::MatchResult& Result)
     Result.Nodes.getNodeAs<CallExpr>("call");
   const LangOptions &Opts = getLangOpts();
 
-  auto argString = getArgText(matchedCall, Result, Opts, UseMultiplicity);
+  auto argString = getArgText(matchedCall, Result, Opts, useMultiplicity());
   std::string repl = MakeCall(ReplacementMacro, argString, KeepArgs,
                               InFlagsArgNum, DefaultFlags, DoFixIt);
 

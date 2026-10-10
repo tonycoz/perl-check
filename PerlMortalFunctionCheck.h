@@ -7,15 +7,12 @@
 #include <string>
 #include <vector>
 #include <string_view>
+#include "PerlClangTidyCheck.h"
 
 using namespace std::literals;
 
-class PerlMortalFunctionCheck : public clang::tidy::ClangTidyCheck
+class PerlMortalFunctionCheck : public PerlClangTidyCheck
 {
-  // Initialized from PerlCheckMultiplicity in the configuration.
-  // This should reflect whether -Dusemultiplicity is enabled for the
-  // build, note that -Dusethreads also turns on multiplicity
-  bool UseMultiplicity;
   // name of the macro that we (may) want to change
   std::string OrigMacro;
   // name of the macro to change to

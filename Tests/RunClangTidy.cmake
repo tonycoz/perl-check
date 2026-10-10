@@ -30,6 +30,7 @@ set(command
   "--format-style=file"
   "--header-filter=/${CHECK_NAME}/"
   "--extra-arg=-I${CMAKE_CURRENT_LIST_DIR}"
+  "--config={'CheckOptions':{'PerlCheckMultiplicity':0}}"
   ${config_arg}
   "${source_file}"
   --

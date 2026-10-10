@@ -12,8 +12,7 @@ PerlLiteralFunctionCheck::PerlLiteralFunctionCheck(
     StringRef PvnMacro_, StringRef PvsMacro_,
     int LiteralArgNum_, int LengthArgNum_,
     llvm::SmallVector<int> &&KeepArgs_) :
-    ClangTidyCheck(Name, Context),
-    UseMultiplicity(Options.getLocalOrGlobal("PerlCheckMultiplicity", 0)),
+    PerlClangTidyCheck(Name, Context),
     PvnMacro(PvnMacro_),
     PvsMacro(PvsMacro_),
     LiteralArgNum(LiteralArgNum_),
@@ -28,11 +27,11 @@ void PerlLiteralFunctionCheck::registerMatchers(MatchFinder* Finder)
     Finder->addMatcher(
         callExpr(isExpandedFromMacro(PvnMacro),
                  unless(isExpandedFromMacro(PvsMacro)),
-                 hasArgument(LiteralArgNum+UseMultiplicity,
+                 hasArgument(LiteralArgNum+useMultiplicity(),
                              traverse(TK_IgnoreUnlessSpelledInSource,
                                       stringLiteral().bind("literal"))
                  ),
-                 hasArgument(LengthArgNum+UseMultiplicity,
+                 hasArgument(LengthArgNum+useMultiplicity(),
                              expr().bind("size"))
         ).bind("call"), this);
 }
@@ -54,7 +53,7 @@ void PerlLiteralFunctionCheck::check(const MatchFinder::MatchResult& Result)
       return;
     const LangOptions &Opts = getLangOpts();
 
-    auto argString = getArgText(matchedCall, Result, Opts, UseMultiplicity);
+    auto argString = getArgText(matchedCall, Result, Opts, useMultiplicity());
 
     std::string repl;
     llvm::raw_string_ostream srepl{repl};

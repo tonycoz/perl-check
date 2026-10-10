@@ -6,12 +6,12 @@
 #include "clang-tidy/ClangTidyCheck.h"
 #include <string>
 #include <vector>
+#include "PerlClangTidyCheck.h"
 
-class PerlUndefSetpvXCheck : public clang::tidy::ClangTidyCheck
+class PerlUndefSetpvXCheck : public PerlClangTidyCheck
 {
   std::string PvMacro;
   std::string PvCallTo;
-  bool UseMultiplicity;
 public:
   // Construct a new check
   //  Name, Context - passed to base constructor

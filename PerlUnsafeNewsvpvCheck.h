@@ -1,13 +1,10 @@
 #pragma once
 
 #include "llvm/ADT/StringRef.h"
-#include "clang/Lex/Lexer.h"
-#include "clang-tidy/ClangTidy.h"
-#include "clang-tidy/ClangTidyCheck.h"
+#include "PerlClangTidyCheck.h"
 
-class PerlUnsafeNewsvpvCheck : public clang::tidy::ClangTidyCheck
+class PerlUnsafeNewsvpvCheck : public PerlClangTidyCheck
 {
-  bool UseMultiplicity;
 public:
   // Construct a new check
   //  Name, Context - passed to base constructor

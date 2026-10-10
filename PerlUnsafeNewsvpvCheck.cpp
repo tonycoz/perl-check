@@ -9,8 +9,7 @@ using namespace perl_check;
 
 PerlUnsafeNewsvpvCheck::PerlUnsafeNewsvpvCheck(
     StringRef Name, ClangTidyContext* Context) :
-    ClangTidyCheck(Name, Context),
-    UseMultiplicity(Options.getLocalOrGlobal("PerlCheckMultiplicity", 0))
+    PerlClangTidyCheck(Name, Context)
 {
 }  
 
@@ -18,8 +17,8 @@ void PerlUnsafeNewsvpvCheck::registerMatchers(MatchFinder* Finder)
 {
     Finder->addMatcher(
         callExpr(isExpandedFromMacro("newSVpv"),
-                 hasArgument(0+UseMultiplicity, expr().bind("string")),
-                 hasArgument(1+UseMultiplicity,
+                 hasArgument(0+useMultiplicity(), expr().bind("string")),
+                 hasArgument(1+useMultiplicity(),
                              traverse(TK_IgnoreUnlessSpelledInSource,
                                       unless(integerLiteral().bind("len")))
                  )
@@ -35,7 +34,7 @@ void PerlUnsafeNewsvpvCheck::check(const MatchFinder::MatchResult& Result)
     const auto sizeArg = Result.Nodes.getNodeAs<Expr>("size");
     const LangOptions &Opts = getLangOpts();
 
-    auto argString = getArgText(matchedCall, Result, Opts, UseMultiplicity);
+    auto argString = getArgText(matchedCall, Result, Opts, useMultiplicity());
 
     std::string repl;
     llvm::raw_string_ostream srepl{repl};

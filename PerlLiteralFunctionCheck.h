@@ -6,17 +6,9 @@
 #include "clang-tidy/ClangTidyCheck.h"
 #include <string>
 #include <vector>
+#include "PerlClangTidyCheck.h"
 
-class PerlLiteralFunctionCheck : public clang::tidy::ClangTidyCheck
-{
-  // Initialized from PerlCheckMulitplicity in the configuration.
-  // This should reflect whether -Dusemultiplicity is enabled for the
-  // build, note that -Dusethreads also turns on multiplicity
-  //
-  // I looked at initializing this from the macro definitions but
-  // we see that too late if we want to use the AST matchers for more
-  // than matching the macro name.
-  bool UseMultiplicity;
+class PerlLiteralFunctionCheck : public PerlClangTidyCheck {
   // name of the macro that we (may) want to change
   std::string PvnMacro;
   // name of the macro to change to

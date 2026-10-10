@@ -14,10 +14,9 @@ PerlUndefSetpvXCheck::PerlUndefSetpvXCheck(
     StringRef PvMacro_,
     StringRef PvCallTo_
     ) :
-    ClangTidyCheck(Name, Context),
+    PerlClangTidyCheck(Name, Context),
     PvMacro(PvMacro_),
-    PvCallTo(PvCallTo_),
-    UseMultiplicity(Options.getLocalOrGlobal("PerlCheckMultiplicity", 0))
+    PvCallTo(PvCallTo_)
 {
 }  
 
@@ -27,8 +26,8 @@ void PerlUndefSetpvXCheck::registerMatchers(MatchFinder* Finder)
         callExpr(
             callee(functionDecl(hasName(PvCallTo))),
             isExpandedFromMacro(PvMacro),
-            hasArgument(0+UseMultiplicity, expr().bind("sv")),
-            hasArgument(1+UseMultiplicity, expr().bind("pv"))
+            hasArgument(0+useMultiplicity(), expr().bind("sv")),
+            hasArgument(1+useMultiplicity(), expr().bind("pv"))
         ).bind("call"), this);
 }
 
@@ -39,7 +38,7 @@ void PerlUndefSetpvXCheck::check(const MatchFinder::MatchResult& Result)
     const auto *pvExpr = Result.Nodes.getNodeAs<Expr>("pv");
 
     const LangOptions &Opts = getLangOpts();
-    auto argString = getArgText(matchedCall, Result, Opts, UseMultiplicity);
+    auto argString = getArgText(matchedCall, Result, Opts, useMultiplicity());
 
     if (!pvExpr->isConstantInitializer(*Result.Context, false) ||
         !pvExpr->isNullPointerConstant(

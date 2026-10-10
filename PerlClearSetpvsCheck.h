@@ -6,10 +6,10 @@
 #include "clang-tidy/ClangTidyCheck.h"
 #include <string>
 #include <vector>
+#include "PerlClangTidyCheck.h"
 
-class PerlClearSetpvsCheck : public clang::tidy::ClangTidyCheck
+class PerlClearSetpvsCheck : public PerlClangTidyCheck
 {
-  bool UseMultiplicity;
 public:
   // Construct a new check
   //  Name, Context - passed to base constructor

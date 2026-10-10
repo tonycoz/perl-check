@@ -11,8 +11,7 @@ using namespace perl_check;
 PerlClearSetpvsCheck::PerlClearSetpvsCheck(
     StringRef Name, ClangTidyContext* Context
     ) :
-    ClangTidyCheck(Name, Context),
-    UseMultiplicity(Options.getLocalOrGlobal("PerlCheckMultiplicity", 0))
+    PerlClangTidyCheck(Name, Context)
 {
 }  
 
@@ -21,12 +20,12 @@ void PerlClearSetpvsCheck::registerMatchers(MatchFinder* Finder)
     Finder->addMatcher(
         callExpr(
             isExpandedFromMacro("sv_setpvs"),
-            hasArgument(0+UseMultiplicity, expr().bind("sv")),
-            hasArgument(1+UseMultiplicity,
+            hasArgument(0+useMultiplicity(), expr().bind("sv")),
+            hasArgument(1+useMultiplicity(),
                         traverse(TK_IgnoreUnlessSpelledInSource,
                                  stringLiteral().bind("literal"))
                         ),
-            hasArgument(2+UseMultiplicity,
+            hasArgument(2+useMultiplicity(),
                         expr().bind("size"))
         ).bind("call"), this);
 }
@@ -49,7 +48,7 @@ void PerlClearSetpvsCheck::check(const MatchFinder::MatchResult& Result)
     if (sizeInt != strLit->getLength() || sizeInt != 0)
       return;
 
-    auto argString = getArgText(matchedCall, Result, Opts, UseMultiplicity);
+    auto argString = getArgText(matchedCall, Result, Opts, useMultiplicity());
     std::string repl = llvm::formatv("SvPVCLEAR({0})", argString(0));
     auto hint = FixItHint::CreateReplacement(matchedCall->getSourceRange(), repl);
     diag(matchedCall->getExprLoc(), "sv_setpvs(sv, \"\") better written as SvPVCLEAR(sv)") << hint;

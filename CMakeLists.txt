@@ -19,6 +19,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_library(perl-check MODULE
   PerlCheck.cpp
+  PerlConfig.cpp
+  PerlClangTidyCheck.cpp
   PerlLiteralFunctionCheck.cpp
   PerlUndefSetsvCheck.cpp
   PerlMortalFunctionCheck.cpp
