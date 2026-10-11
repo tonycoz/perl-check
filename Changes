@@ -1,0 +1,6 @@
+- now looks for a perl binary to extract usemultiplicity from, if you
+  haven't set PerlCheckMultiplicity.
+
+1.0.0 - 19 September 2026
+
+Initial release

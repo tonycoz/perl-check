@@ -53,7 +53,43 @@ bear -- make
 # Invoking clang-tidy
 
 ```
-clang-tidy-18 --load=path/to/build/libperl-check.so --checks='-*,perl-*' --config='{"CheckOptions":{"PerlCheckMultiplicity":1}}' source.c
+clang-tidy-18 --load=path/to/build/libperl-check.so --checks='-*,perl-*' source.c
+```
+
+`perl-check` needs to know if your code was compiled with
+`usemultiplicity` enabled, it will look for a perl binary in the
+current directory or the PATH to extract `usemultiplicity`.  You can
+specify a different perl by setting `PerlBin`:
+
+```
+... --config='{"CheckOptions":{"PerlBin":"/path/to/perl"}}' ...
+```
+
+or simply set `PerlCheckMultiplicity`:
+
+```
+... --config='{"CheckOptions":{"PerlCheckMultiplicity":1}}'  ...
+```
+
+`perl-check` will report what definition it uses:
+
+```
+$ clang-tidy-24 --load ~/dev/llvm/git/perl-check/build/libperl-check.so --checks='-*,perl-*' foo2.c
+...
+perl-check: usemultiplicity=define from "/usr/bin/perl -V::usemultiplicity:"
+...
+$ clang-tidy-24 --load ~/dev/llvm/git/perl-check/build/libperl-check.so --config='{"CheckOptions":{"PerlBin":"/home/tony/perl/v5.44.0-thr/bin/perl"}}' --checks='-*,perl-*' foo2.c
+...
+perl-check: usemultiplicity=define from "/home/tony/perl/v5.44.0-thr/bin/perl -V::usemultiplicity:"
+...
+$ clang-tidy-24 --load ~/dev/llvm/git/perl-check/build/libperl-check.so --config='{"CheckOptions":{"PerlBin":"/home/tony/perl/v5.36.0-dbg-san/bin/perl"}}' --checks='-*,perl-*' foo2.c
+...
+perl-check: usemultiplicity=undef from "/home/tony/perl/v5.36.0-dbg-san/bin/perl -V::usemultiplicity:"
+...
+$ clang-tidy-24 --load ~/dev/llvm/git/perl-check/build/libperl-check.so --config='{"CheckOptions":{"PerlCheckMultiplicity":1}}' --checks='-*,perl-*' foo2.c
+...
+perl-check: usemultiplicity=define from configuration
+...
 ```
 
 The `clang-tidy` invoked should match the version the loadable module
@@ -68,13 +104,9 @@ You can also use `run-clang-tidy` to avoid test all sources, or all
 sources matching a regular expression:
 
 ```
-run-clang-tidy-18 -load=path/to/build/libperl-check.so -checks='-*,perl-*' -config='{"CheckOptions":{"PerlCheckMultiplicity":1}}'
+run-clang-tidy-18 -load=path/to/build/libperl-check.so -checks='-*,perl-*'
 ```
 Note the change from `--` to `-` for the options.
-
-You will need to supply `PerlCheckMultiplicity` set to 1 as in the
-above examples if your perl was built with threads, or even just
-multiplicity.
 
 # Example output
 
