@@ -1,8 +1,10 @@
 # perl-check
 
-This is a clang-tidy plugin that currently checks for calls to
-`sv_setpvn()` with a literal string, which are better written with
-`sv_setpvs()`.
+This is a clang-tidy plugin that currently checks for a number of
+calls that are either error-prone, over verbose, could possibly be
+faster or may generate more code than needed.
+
+See a list of the checks below.
 
 # Building the module
 
@@ -397,11 +399,17 @@ calculates the length automatically.
 Complain about using `sv_setsv(sv, &PL_sv_undef)` since
 `sv_set_undef(sv)` is likely faster.
 
+Note: sv_set_undef() is buggy up to 5.44, clearing the PADTMP and TEMP
+flags when it shouldn't.  Devel::PPPort provides an alternative.
+
 * `perl-undef-setpv`
 * `perl-undef-setpvn`
 
 Complain about `sv_setpv(sv, NULL)` or `sv_setpvn(sv, NULL, 0)` to set
 `sv` to `undef`, and suggest/FIXIT `sv_set_undef(sv)`.
+
+You may want to disable `perl-undef-setpv`, since Devel::PPPort uses
+that to "unbugify" sv_set_undef().
 
 * `perl-mortal-newSVpvn`
 
