@@ -438,6 +438,11 @@ produce an incorrect result if the string contains NULs, or just be
 wasteful.  This won't complain about non-zero literal lengths, but
 those should probably use newSVpvn() too.  Provides a FIXIT.
 
+* `perl-unsafe-freesv`
+
+Check for calls to `Safefree(sv)` where `sv` is a pointer to `SV`,
+`AV`, `HV`, `CV`, `GV` or `IO`.
+
 # FixIts
 
 Most checks provide fixits, and clang-tidy can apply the fixes.
