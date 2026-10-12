@@ -27,6 +27,7 @@ add_library(perl-check MODULE
   PerlUndefSetpvXCheck.cpp
   PerlClearSetpvsCheck.cpp
   PerlUnsafeNewsvpvCheck.cpp
+  PerlFreeSvCheck.cpp
   )
 target_include_directories(perl-check PRIVATE ${CLANG_INCLUDE_DIRS})
 target_link_libraries(perl-check PRIVATE clang-tidy)

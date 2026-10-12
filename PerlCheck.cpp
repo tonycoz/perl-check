@@ -5,6 +5,7 @@
 #include "PerlMortalFunctionCheck.h"
 #include "PerlClearSetpvsCheck.h"
 #include "PerlUnsafeNewsvpvCheck.h"
+#include "PerlFreeSvCheck.h"
 #include "clang-tidy/ClangTidy.h"
 #include "clang-tidy/ClangTidyModule.h"
 #if __has_include("clang-tidy/ClangTidyModuleRegistry.h")
@@ -137,6 +138,12 @@ public:
           "perl-unsafe-newsvpv",
           [](llvm::StringRef Name, ClangTidyContext *Context) {
             return std::make_unique<PerlUnsafeNewsvpvCheck>(
+                Name, Context);
+          });
+      CheckFactories.registerCheckFactory(
+          "perl-unsafe-freesv",
+          [](llvm::StringRef Name, ClangTidyContext *Context) {
+            return std::make_unique<PerlFreeSvCheck>(
                 Name, Context);
           });
     }
