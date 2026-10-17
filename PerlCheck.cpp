@@ -8,7 +8,7 @@
 #include "PerlFreeSvCheck.h"
 #include "clang-tidy/ClangTidy.h"
 #include "clang-tidy/ClangTidyModule.h"
-#if __has_include("clang-tidy/ClangTidyModuleRegistry.h")
+#if LLVM_VERSION_MAJOR < 22
 #include "clang-tidy/ClangTidyModuleRegistry.h"
 #endif
 
