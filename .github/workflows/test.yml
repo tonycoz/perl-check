@@ -21,10 +21,14 @@ jobs:
           version: 1.2
       - name: checkout
         uses: actions/checkout@v6
+        with:
+            path: perl-check
       - name: build
         run: |
+            cd perl-check
             cmake -B build
             cmake --build build -v
       - name: test
         run: |
+            cd perl-check
             cmake --build build --target test ARGS="--rerun-failed --output-on-failure"
