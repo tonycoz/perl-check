@@ -1,15 +1,15 @@
 # perl-check
 
-This is a clang-tidy plugin that currently checks for a number of
-calls that are either error-prone, over verbose, could possibly be
-faster or may generate more code than needed.
+This is a clang-tidy plugin that checks for a number of calls that are
+either error-prone, over verbose, could possibly be faster or may
+generate more code than needed.
 
 See a list of the checks below.
 
 # Building the module
 
 Install clang and its development libraries, I used the debs from
-apt.llvm.org, and tested with llvm 18.
+apt.llvm.org, and tested with llvm 18 through 24 (trunk at this time).
 
 You also need cmake, you may also want libedit-dev.
 ```
@@ -19,6 +19,11 @@ cmake --build build
 
 which should create `libperl-check.so` in `build/`.  You'll need the
 path to this and to `.perl-clang-tidy` in this directory.
+
+To run the tests:
+```
+cmake --build build -t test
+```
 
 If you have multiple versions of `clang` installed `cmake` seems to
 select the first `clang` it finds going by directory order, you can
@@ -51,6 +56,13 @@ Switch to your XS root, assuming an `ExtUtils::MakeMaker` build:
 perl Makefile.PL
 bear -- make
 ```
+
+For a `Module::Build`-based distribution I expect:
+```
+perl Build.PL
+bear -- ./Build
+```
+to work.
 
 # Invoking clang-tidy
 
@@ -102,17 +114,90 @@ $ grep Clang_DIR build/CMakeCache.txt
 Clang_DIR:PATH=/usr/lib/cmake/clang-18
 ```
 
-You can also use `run-clang-tidy` to avoid test all sources, or all
-sources matching a regular expression:
+You can also use `run-clang-tidy` to test all sources, or all sources
+matching a regular expression:
 
 ```
 run-clang-tidy-18 -load=path/to/build/libperl-check.so -checks='-*,perl-*'
 ```
 Note the change from `--` to `-` for the options.
 
+# Checks
+
+* `perl-literal-sv_setpvn`
+* `perl-literal-sv_setpvn_mg`
+* `perl-literal-hv_fetch`
+* `perl-literal-newSVpvn`
+* `perl-literal-newSVpvn_flags`
+* `perl-literal-sv_catpvn`
+* `perl-literal-sv_catpvn_flags`
+* `perl-literal-sv_catpvn_nomg`
+* `perl-literal-savepvn`
+* `perl-literal-get_cvn_flags`
+
+If any of the corresponding API macros is called with a string literal
+and the length of that literal, suggest the corresponding API that
+calculates the length automatically.
+
+* `perl-undef-sv_setsv`
+
+Complain about using `sv_setsv(sv, &PL_sv_undef)` since
+`sv_set_undef(sv)` is likely faster.
+
+Note: sv_set_undef() is buggy up to 5.44, clearing the PADTMP and TEMP
+flags when it shouldn't.  Devel::PPPort provides an alternative.
+
+* `perl-undef-setpv`
+* `perl-undef-setpvn`
+
+Complain about `sv_setpv(sv, NULL)` or `sv_setpvn(sv, NULL, 0)` to set
+`sv` to `undef`, and suggest/FIXIT `sv_set_undef(sv)`.
+
+You may want to disable `perl-undef-setpv`, since Devel::PPPort uses
+that to "unbugify" sv_set_undef().
+
+* `perl-mortal-newSVpvn`
+
+Check for calls to the given function wrapped by `sv_2mortal()`, when
+the wrapped function has a flag to mortalize the result.
+
+* `perl-mortal-newSVsv`
+
+Check for calls to the given function wrapped by `sv_2mortal()`, when
+`sv_mortalcopy()` does the same *and* mortalizes.
+
+The `newSVsv()` check does not produce a fix it (I tried, but it
+wouldn't replace, I suspect the macros confused clang-tidy.)
+
+* `perl-clear-setpvs`
+
+Check for calls to the given function to set an SV to an empty string
+and suggest/FIXIT `SvPVCLEAR()` instead.
+
+* `perl-unsafe-newsvpv`
+
+Check for calls to `newSVpv()` with a non-literal second argument and
+suggest `newSVpvn()` instead.  If the second argument happens to be
+zero then `newSVpv()` will call strlen() on the string, which may
+produce an incorrect result if the string contains NULs, or just be
+wasteful.  This won't complain about non-zero literal lengths, but
+those should probably use newSVpvn() too.  Provides a FIXIT.
+
+* `perl-unsafe-freesv`
+
+Check for calls to `Safefree(sv)` where `sv` is a pointer to `SV`,
+`AV`, `HV`, `CV`, `GV` or `IO`.
+
+This check currently requires clang 22 or later.
+
+# FixIts
+
+Most checks provide fixits, and clang-tidy can apply the fixes.
+
 # Example output
 
-Edited out the files with no issues found to reduce noise.
+Edited out the files with no issues found to reduce noise.  The issues
+found here in perl have been fixed.
 
 ```
 $ run-clang-tidy-18 -load=/home/tony/dev/llvm/git/perl-check/build/libperl-check.so -checks='-*,perl-*' -config='{"CheckOptions":{"PerlCheckMultiplicity":1}}' 'perl6/[a-z_]+\.c'
@@ -376,75 +461,3 @@ regcomp.c:16069:19: warning: sv_2mortal(newSVsv(...)) better written as sv_morta
 5 warnings generated.
 Suppressed 2 warnings (2 with check filters).
 ```
-
-# Checks
-
-* `perl-literal-sv_setpvn`
-* `perl-literal-sv_setpvn_mg`
-* `perl-literal-hv_fetch`
-* `perl-literal-newSVpvn`
-* `perl-literal-newSVpvn_flags`
-* `perl-literal-sv_catpvn`
-* `perl-literal-sv_catpvn_flags`
-* `perl-literal-sv_catpvn_nomg`
-* `perl-literal-savepvn`
-* `perl-literal-get_cvn_flags`
-
-If any of the corresponding API macros is called with a string literal
-and the length of that literal, suggest the corresponding API that
-calculates the length automatically.
-
-* `perl-undef-sv_setsv`
-
-Complain about using `sv_setsv(sv, &PL_sv_undef)` since
-`sv_set_undef(sv)` is likely faster.
-
-Note: sv_set_undef() is buggy up to 5.44, clearing the PADTMP and TEMP
-flags when it shouldn't.  Devel::PPPort provides an alternative.
-
-* `perl-undef-setpv`
-* `perl-undef-setpvn`
-
-Complain about `sv_setpv(sv, NULL)` or `sv_setpvn(sv, NULL, 0)` to set
-`sv` to `undef`, and suggest/FIXIT `sv_set_undef(sv)`.
-
-You may want to disable `perl-undef-setpv`, since Devel::PPPort uses
-that to "unbugify" sv_set_undef().
-
-* `perl-mortal-newSVpvn`
-
-Check for calls to the given function wrapped by `sv_2mortal()`, when
-the wrapped function has a flag to mortalize the result.
-
-* `perl-mortal-newSVsv`
-
-Check for calls to the given function wrapped by `sv_2mortal()`, when
-`sv_mortalcopy()` does the same *and* mortalizes.
-
-The `newSVsv()` check does not produce a fix it (I tried, but it
-wouldn't replace, I suspect the macros confused clang-tidy.)
-
-* `perl-clear-setpvs`
-
-Check for calls to the given function to set an SV to an empty string
-and suggest/FIXIT `SvPVCLEAR()` instead.
-
-* `perl-unsafe-newsvpv`
-
-Check for calls to `newSVpv()` with a non-literal second argument and
-suggest `newSVpvn()` instead.  If the second argument happens to be
-zero then `newSVpv()` will call strlen() on the string, which may
-produce an incorrect result if the string contains NULs, or just be
-wasteful.  This won't complain about non-zero literal lengths, but
-those should probably use newSVpvn() too.  Provides a FIXIT.
-
-* `perl-unsafe-freesv`
-
-Check for calls to `Safefree(sv)` where `sv` is a pointer to `SV`,
-`AV`, `HV`, `CV`, `GV` or `IO`.
-
-This check currently requires clang 22 or later.
-
-# FixIts
-
-Most checks provide fixits, and clang-tidy can apply the fixes.
