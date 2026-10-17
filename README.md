@@ -443,6 +443,8 @@ those should probably use newSVpvn() too.  Provides a FIXIT.
 Check for calls to `Safefree(sv)` where `sv` is a pointer to `SV`,
 `AV`, `HV`, `CV`, `GV` or `IO`.
 
+This check currently requires clang 22 or later.
+
 # FixIts
 
 Most checks provide fixits, and clang-tidy can apply the fixes.
