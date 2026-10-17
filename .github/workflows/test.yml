@@ -13,12 +13,30 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+        fail-fast: false
+        matrix:
+            llvm:
+                - "18"
+                - "19"
+                - "20"
+                - "21"
+                - "22"
+                - "23"
+                - "24"
     steps:
       - name: install package dependencies cached
         uses: awalsh128/cache-apt-pkgs-action@v1.6.3
         with:
-          packages: build-essential clang clang-tidy libclang-dev
+          packages: build-essential perl
           version: 1.2
+      - name: install llvm
+        uses: ZhongRuoyu/setup-llvm@v0
+        with:
+            llvm-version: ${{ matrix.llvm }}
+      - name: Symlink libclang.so (Linux)
+        run: sudo ln -s libclang-11.so.1 /lib/x86_64-linux-gnu/libclang.so
+        working-directory: ${{ env.LLVM_PATH }}/lib
       - name: checkout
         uses: actions/checkout@v6
         with:
@@ -28,6 +46,11 @@ jobs:
             cd perl-check
             cmake -B build
             cmake --build build -v
+      - name: dump ldd
+        run: |
+            ldd perl-check/build/libperl-check.so
+            which clang-tidy
+            ldd `which clang-tidy`
       - name: test
         run: |
             cd perl-check

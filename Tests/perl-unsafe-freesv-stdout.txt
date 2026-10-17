@@ -1,45 +1,45 @@
-perl-unsafe-freesv.c:4:3: warning: Safefree() of an SV * should use SvREFCNT_dec() [perl-unsafe-freesv]
-    4 |   Safefree(sv);
-      |   ^
-/home/tony/dev/llvm/git/perl-check/Tests/perlsim.h:12:21: note: expanded from macro 'Safefree'
-   12 | #define Safefree(p) safesysfree((void*)(p))
-      |                     ^
-/home/tony/dev/llvm/git/perl-check/Tests/perlsim.h:11:24: note: expanded from macro 'safesysfree'
-   11 | #define safesysfree(p) Perl_safesysfree(p)
-      |                        ^
-perl-unsafe-freesv.c:5:3: warning: Safefree() of an SV * should use SvREFCNT_dec() [perl-unsafe-freesv]
-    5 |   Safefree(av);
-      |   ^
-/home/tony/dev/llvm/git/perl-check/Tests/perlsim.h:12:21: note: expanded from macro 'Safefree'
-   12 | #define Safefree(p) safesysfree((void*)(p))
-      |                     ^
-/home/tony/dev/llvm/git/perl-check/Tests/perlsim.h:11:24: note: expanded from macro 'safesysfree'
-   11 | #define safesysfree(p) Perl_safesysfree(p)
-      |                        ^
-perl-unsafe-freesv.c:6:3: warning: Safefree() of an SV * should use SvREFCNT_dec() [perl-unsafe-freesv]
-    6 |   Safefree(hv);
-      |   ^
-/home/tony/dev/llvm/git/perl-check/Tests/perlsim.h:12:21: note: expanded from macro 'Safefree'
-   12 | #define Safefree(p) safesysfree((void*)(p))
-      |                     ^
-/home/tony/dev/llvm/git/perl-check/Tests/perlsim.h:11:24: note: expanded from macro 'safesysfree'
-   11 | #define safesysfree(p) Perl_safesysfree(p)
-      |                        ^
 perl-unsafe-freesv.c:7:3: warning: Safefree() of an SV * should use SvREFCNT_dec() [perl-unsafe-freesv]
-    7 |   Safefree(gv);
+    7 |   Safefree(sv);
       |   ^
-/home/tony/dev/llvm/git/perl-check/Tests/perlsim.h:12:21: note: expanded from macro 'Safefree'
-   12 | #define Safefree(p) safesysfree((void*)(p))
+perl-unsafe-freesv.c:4:21: note: expanded from macro 'Safefree'
+    4 | #define Safefree(p) safesysfree((void*)(p))
       |                     ^
-/home/tony/dev/llvm/git/perl-check/Tests/perlsim.h:11:24: note: expanded from macro 'safesysfree'
-   11 | #define safesysfree(p) Perl_safesysfree(p)
+perl-unsafe-freesv.c:3:24: note: expanded from macro 'safesysfree'
+    3 | #define safesysfree(p) Perl_safesysfree(p)
       |                        ^
 perl-unsafe-freesv.c:8:3: warning: Safefree() of an SV * should use SvREFCNT_dec() [perl-unsafe-freesv]
-    8 |   Safefree(io);
+    8 |   Safefree(av);
       |   ^
-/home/tony/dev/llvm/git/perl-check/Tests/perlsim.h:12:21: note: expanded from macro 'Safefree'
-   12 | #define Safefree(p) safesysfree((void*)(p))
+perl-unsafe-freesv.c:4:21: note: expanded from macro 'Safefree'
+    4 | #define Safefree(p) safesysfree((void*)(p))
       |                     ^
-/home/tony/dev/llvm/git/perl-check/Tests/perlsim.h:11:24: note: expanded from macro 'safesysfree'
-   11 | #define safesysfree(p) Perl_safesysfree(p)
+perl-unsafe-freesv.c:3:24: note: expanded from macro 'safesysfree'
+    3 | #define safesysfree(p) Perl_safesysfree(p)
+      |                        ^
+perl-unsafe-freesv.c:9:3: warning: Safefree() of an SV * should use SvREFCNT_dec() [perl-unsafe-freesv]
+    9 |   Safefree(hv);
+      |   ^
+perl-unsafe-freesv.c:4:21: note: expanded from macro 'Safefree'
+    4 | #define Safefree(p) safesysfree((void*)(p))
+      |                     ^
+perl-unsafe-freesv.c:3:24: note: expanded from macro 'safesysfree'
+    3 | #define safesysfree(p) Perl_safesysfree(p)
+      |                        ^
+perl-unsafe-freesv.c:10:3: warning: Safefree() of an SV * should use SvREFCNT_dec() [perl-unsafe-freesv]
+   10 |   Safefree(gv);
+      |   ^
+perl-unsafe-freesv.c:4:21: note: expanded from macro 'Safefree'
+    4 | #define Safefree(p) safesysfree((void*)(p))
+      |                     ^
+perl-unsafe-freesv.c:3:24: note: expanded from macro 'safesysfree'
+    3 | #define safesysfree(p) Perl_safesysfree(p)
+      |                        ^
+perl-unsafe-freesv.c:11:3: warning: Safefree() of an SV * should use SvREFCNT_dec() [perl-unsafe-freesv]
+   11 |   Safefree(io);
+      |   ^
+perl-unsafe-freesv.c:4:21: note: expanded from macro 'Safefree'
+    4 | #define Safefree(p) safesysfree((void*)(p))
+      |                     ^
+perl-unsafe-freesv.c:3:24: note: expanded from macro 'safesysfree'
+    3 | #define safesysfree(p) Perl_safesysfree(p)
       |                        ^

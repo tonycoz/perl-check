@@ -31,4 +31,7 @@ add_run_clang_tidy_test(perl-mortal-newSVsv)
 add_run_clang_tidy_test(perl-clear-setpvs)
 
 add_run_clang_tidy_test(perl-unsafe-newsvpv)
-add_run_clang_tidy_test(perl-unsafe-freesv)
+
+if(LLVM_VERSION_MAJOR GREATER_EQUAL 22)
+  add_run_clang_tidy_test(perl-unsafe-freesv)
+endif()

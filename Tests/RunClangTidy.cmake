@@ -54,7 +54,7 @@ string(REGEX REPLACE "\n+$" "" actual_stdout "${actual_stdout}")
 if(NOT actual_stdout STREQUAL expect_stdout)
   string(REPLACE "\n" "\n  " expect_stdout_formatted "  ${expect_stdout}")
   string(REPLACE "\n" "\n  " actual_stdout_formatted "  ${actual_stdout}")
-  string(APPEND RunClangTidy_TEST_FAILED "Expected stdout:\n${expect_stdout_formatted}\nActual stdout:\n${actual_stdout_formatted}\n")
+  string(APPEND RunClangTidy_TEST_FAILED "Expected stdout  (${RunClangTidy_BINARY_DIR}):\n${expect_stdout_formatted}\nActual stdout:\n${actual_stdout_formatted}\n")
 endif()
 
 function(check_fixit expected fallback_expected actual)

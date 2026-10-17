@@ -8,8 +8,6 @@ typedef struct io { unsigned r; } IO;
 typedef struct gv { unsigned r; } GV;
 
 extern void Perl_safesysfree(void *p);
-#define safesysfree(p) Perl_safesysfree(p)
-#define Safefree(p) safesysfree((void*)(p))
 
 #ifdef MULTIPLICITY
 struct PerlInterpreter {
